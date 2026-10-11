@@ -6,12 +6,150 @@ Status / handoff file for the Sathvika Gudise AI-engineering portfolio. Updated 
 
 ## Current phase
 
-**Phase 13 — connect existing local repo to GitHub (done).**
-Phases 1–12 complete. Phase 13 connected the local repository (commit
-`39f2c64` "Initial portfolio implementation", 105 files, 13,957 insertions) to
-`https://github.com/sathvikagudise/sathvika-portfolio.git`, pushed `master` to
-the empty remote, and verified the remote contains the commit. No deployment to
-Vercel/Render performed.
+**Phase 15 — PostgreSQL configuration/preflight (documentation only; no provisioning performed).**
+Phases 1–14 complete. Phase 15 inspected database configuration/migrations/seed
+scripts, assessed free-tier provider limits (Neon), confirmed no PostgreSQL
+credentials exist locally, and documented safe setup steps. **No database was
+provisioned and no real PostgreSQL migrations were run** in this environment.
+
+## DB configuration (inspected)
+
+- `backend/app/config.py`: reads `DATABASE_URL` from env (defaults to local
+  example). Driver is `psycopg` (v3) per `requirements.txt` (`psycopg[binary]`)
+  and SQLAlchemy URL uses `postgresql+psycopg://...` in config/example — matches
+  app's `database_url` default and Alembic setup.
+- `backend/alembic/env.py`: sets URL from app settings (`get_settings().database_url`); models imported so metadata is complete. Offline/online modes supported.
+- `backend/alembic.ini`: URL left empty (sourced from env). Migration chain
+  `0001→0002→0003` compiles offline.
+- `backend/app/database.py`: `create_engine(settings.database_url, pool_pre_ping=True, future=True)` — lazy, safe to import without live DB.
+- Scripts: `create_owner.py` reads `ADMIN_EMAIL`/`ADMIN_PASSWORD` from env or
+  flags; `seed_projects.py` uses `SessionLocal` and is idempotent (backfills
+  empty sections only). Both safe to run against a verified target DB.
+
+## PostgreSQL provider (free-tier assessment)
+
+**Neon Free tier (current typical characteristics; subject to change):**
+- Compute auto-scales to zero on inactivity (sleep-on-idle) → cold starts; not
+  assumed always-on. Connection limits apply; suitable for dev/small traffic
+  but behavior varies.
+- 10 GB storage, branching available, no fixed long-term paid commitment on
+  free tier. Still a third-party service with evolving terms.
+- Not provisioned here. No credentials created or committed.
+
+Other options considered: Supabase (free), Render (free Postgres has
+constraints; avoid expiring DBs for long-term persistence). Documented but not
+selected/provisioned.
+
+## Credentials & safety
+
+- No `.env` files with real secrets found (only `.env.example`). No
+  `*.sqlite3`. `.gitignore` prevents committing secrets/DB files.
+- `DATABASE_URL` in examples uses placeholder local URL; no real connection
+  strings in repo or docs beyond examples. No credentials printed/stored.
+
+## Setup steps (documented, NOT executed)
+
+If provisioning a persistent free-tier PostgreSQL:
+1. Create account on chosen provider (Neon/Supabase/Render free). Do not enable
+   paid features.
+2. Create a new database/project; copy the **pooled/standard** PostgreSQL
+   connection string (must use `psycopg` driver: `postgresql+psycopg://...`).
+3. Create/ensure `backend/.env` (ignored) with `DATABASE_URL=<connection_string>`,
+   production CORS/cookies, and contact settings (or `mock`). Never commit it.
+4. From `backend/`: `alembic upgrade head` (runs against real DB). Verify
+   tables created (projects, owners, auth_sessions) and columns from 0003.
+5. Optional: `python -m app.scripts.create_owner --email ... --password ...`
+   (env vars preferred). `python -m app.scripts.seed_projects` (idempotent).
+6. Smoke test: connect, query published projects, auth flows. Do **not** assume
+   SQLite test parity — test real DB behavior.
+
+## Status
+
+- **No real PostgreSQL database provisioned.** Migrations compiled offline only.
+- All SQLite tests still pass (39 passed). No live DB smoke performed.
+- Ready to execute above steps when credentials become available. No paid
+  resources created, no secrets committed.
+
+Stopped at cap, awaiting approval.
+
+## Git reconciliation
+
+- Diff inspected: `PROJECT_STATUS.md` change only (accurate Phase 13 results; no
+  secrets). Committed as `b5bba2c` "Update PROJECT_STATUS.md with Phase 13
+  results". Pushed normally to `origin/master` (no amend, no force-push).
+- History: `39f2c64` (initial) → `b5bba2c` (status update). Working tree clean
+  except untracked `.gitignore` (not staged). Remote `master` synchronized.
+
+## Deployment preflight (documentation)
+
+**Frontend (Vercel Free) — settings (not applied):**
+- Build: `npm run build`; output `dist/`. Root `package.json`.
+- Env: `VITE_API_URL=https://your-backend.onrender.com` (set in Vercel Project
+  Environment Variables; never commit secrets).
+- SPA fallback: Vite handles client routing; ensure Vercel serves `index.html`
+  for unknown routes (standard for SPA).
+
+**Backend (Render Free) — settings (not applied):**
+- Runtime: Python, web service. Repo root or `backend/` directory; build command
+  `pip install -r backend/requirements.txt`. Start command
+  `uvicorn app.main:app --host 0.0.0.0 --port $PORT` (run from `backend/`).
+- Env: `DATABASE_URL` (PostgreSQL), `CORS_ORIGINS` (comma list including Vercel
+  origin), `COOKIE_SECURE=true`, `COOKIE_SAMESITE=none`, contact provider vars
+  or `CONTACT_PROVIDER=mock`, rate limits. Secrets only in Render env.
+- Sleep-on-idle: typical on Render Free (cold starts possible). Not assumed
+  always-on.
+
+**Database (persistent PostgreSQL, free tier) — not provisioned:**
+- Providers: Neon/Supabase/Render free Postgres (choose currently available free
+  tier; limits may change). Migration: `alembic upgrade head` after setting
+  `DATABASE_URL`. Seed: `python -m app.scripts.create_owner` (secure), then
+  `python -m app.scripts.seed_projects` (idempotent). Existing records never
+  overwritten.
+
+**Auth/CSRF/CORS (production):**
+- Separate HTTPS origins → `COOKIE_SECURE=true`, `COOKIE_SAMESITE=none`.
+- CORS allowlist must include exact frontend origin; credentials enabled only
+  when non-empty and no wildcard. Owner writes require CSRF token + session.
+
+**Contact (email):**
+- Default `CONTACT_PROVIDER=mock` → external delivery disabled. For real
+  delivery, configure HTTPS API provider (e.g. Brevo/Resend/SendGrid) with free
+  tier, set secrets in backend env only; never in frontend. Mock acceptance is
+  not real delivery.
+
+**Health/smoke (commands):**
+- Backend health: `GET /` or `GET /api/v1/health`. Migrations: `alembic upgrade
+  head --sql` (offline) or `alembic upgrade head`. Tests: `pytest -q` (39
+  passed). Frontend: `npm run lint`, `npx tsc -b`, `npm run build`.
+- Smoke: login/logout, CSRF-protected writes, publish/draft visibility, project
+  editing, contact submission (mock or real only if configured).
+
+## Free-tier/safety checks
+
+- Free-tier status: Vercel Free, Render Free, and a persistent PostgreSQL free
+  tier are documented as targets; no paid resources created/assumed, no billing
+  details entered. Limits subject to change.
+- Secrets: no secrets in Git, frontend (`VITE_*` only non-secret), or docs.
+  `.gitignore` protects `.env*`. Examples contain placeholders only.
+- Safety: no deploy, no history rewrite, no remote visibility change, no new
+  features. `.gitignore` verified; contact form uses mockable provider.
+
+## Verification
+
+- Backend: `pytest -q` → **39 passed**, 1 warning
+- Frontend: `lint` clean, `tsc -b` clean, `build` clean
+- Remote synced (`b5bba2c` on origin/master)
+
+## Unverified / missing
+
+- No deployment performed (no live URLs, no health checks against deployed
+  services). No provider accounts/credentials created.
+- Real email delivery untested (mock only). Live PostgreSQL untested.
+- Assets: portrait, resume PDF, favicon (documented).
+- In-memory rate limiters are per-process (multi-instance needs shared store).
+- Render free tier sleep-on-idle behavior not observed.
+
+Ready to stop at cap, awaiting approval.
 
 ## Connection details
 
