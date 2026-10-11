@@ -1,0 +1,100 @@
+/* --- About --- */
+
+.about__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+
+.about__prose p {
+  margin-bottom: 1.15rem;
+  max-width: 44rem;
+}
+
+.about__prose p:first-child {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--text-1);
+}
+
+.about__note {
+  margin-top: 1.25rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--hairline);
+  border-left: 2px solid var(--cat-achievements);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: rgba(216, 177, 90, 0.04);
+  max-width: 44rem;
+}
+
+.about__note-title {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cat-achievements);
+  margin-bottom: 0.5rem;
+}
+
+.about__note-list {
+  margin: 0;
+  padding: 0;
+  list-style: disc;
+  padding-inline-start: 1.1rem;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--text-2);
+}
+
+.about__note-list li {
+  margin-bottom: 0.35rem;
+}
+
+.about__note-list li:last-child {
+  margin-bottom: 0;
+}
+
+.about__facts {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: rgba(17, 23, 40, 0.55);
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.about__facts-title {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.about__fact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.about__fact:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.about__fact dt {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.about__fact dd {
+  font-size: 0.88rem;
+  text-align: right;
+  color: var(--text-1);
+}
