@@ -897,3 +897,31 @@ do not appear verbatim; only the base names above are locally supported.
 
 ### Git
 Committed locally. **Not pushed** (per local-only instruction).
+
+## Phase 34
+- All 13 projects verified; exact GitHub URLs added (including CardioRisk-AI-, Smart-ID-Verification-Forgery-Detection-System, VoiceEnabledExpenseManager, CrisisMind, ScoutIQ, email-automator, collabgraph).
+- Content: underReview=false, no fabricated metrics, under-review filler removed where requested.
+- Case/project UI: GitHub icon + link on card and case study. No API usage.
+- Checks: tsc/lint/build clean. 13 repo URLs in bundle, 0 api/v1/projects.
+- Commit: 4af6b0f (local). Not pushed.
+
+## Phase 35
+- Case study redesign: Problem/Solution/Technical Highlights, prominent GitHub link, “Back to All Projects”. Visual tweaks.
+- Checks: tsc/lint/build clean. 13 repo URLs, 0 api/v1/projects.
+- Commit: c1c8fc5 (local). Not pushed.
+
+## Phase 36
+- Case studies simplified to compact structure: Overview, What I built, Technical approach. Removed redundant sections. Trimmed filler.
+- Styles updated for compact blocks. Back link retained. Verified badge retained.
+- Checks: tsc/lint/build clean. 13 repo URLs, 0 api/v1/projects.
+- Commit: 038b984 (local). Working tree clean. Not pushed.
+
+### Validation notes (local)
+- SkillForge, AccessGuard, NeuraHeal, CollabGraph case studies scannable; each shows exact GitHub repo. Search/case-study routing intact.
+- No unrelated pages altered; portrait unchanged. Backend-independent.
+
+## Phase 37
+- Projects grid: 3 cols (desktop), 2 cols (<=1200), 1 col (<=720). Cards stretch evenly, spacing/alignment preserved.
+- No case study or other page changes. All 13 projects, badges, search, routing preserved.
+- Checks: tsc/lint/build clean.
+- Commit: (pending after verification) — will commit locally only after inspection.
