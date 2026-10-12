@@ -1,7 +1,7 @@
-import { type PublishedProject } from '../api/client'
+import { type PublicProject } from '../data/publicProjects'
 
 interface ProjectCaseStudyProps {
-  project: PublishedProject
+  project: PublicProject
 }
 
 const BULLET_SECTIONS: {
@@ -123,9 +123,9 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
           <h2 className="case-study__section-label">Content source</h2>
           <div className="case-study__section-inner">
             <p className="case-study__muted">
-              This case study is loaded from the portfolio API and editable in the
-              owner dashboard (last updated {project.updated_at}). Sections only
-              appear when verified content exists — nothing is invented.
+              This case study is drawn from the portfolio's verified content.
+              Sections only appear when verified content exists — nothing is
+              invented.
             </p>
           </div>
         </section>

@@ -614,3 +614,41 @@ Admin console locally: run the backend + `npm run dev`, then open `http://127.0.
 - Public Projects: still uses API (usePublishedProjects) — decoupling to local data remains pending (low-risk). 
 - Contact: honest fallbacks, no fabricated links. 
 - No browser automation performed; deployment not executed. Portfolio is build-stable but Projects requires API unless refactored.
+
+## Phase 28 — Verify and Fix Projects API Dependency
+
+- **Branch/commit (start)**: master @ 5db2b26; working tree clean.
+- **Root cause of the discrepancy**: The referenced Phase 26 commit `d068c60`
+  does **not exist** in this repository (`git cat-file -t d068c60` → "Not a
+  valid object name"; absent from `git log --all`). The decoupling described in
+  the Phase 26 report was never committed to this checkout. At 981bd2b/5db2b26
+  the public Projects section still imported `usePublishedProjects()` and called
+  `GET /api/v1/projects`. Phase 27 had correctly flagged this as still
+  API-backed.
+- **Changes made (this phase)**:
+  - Added `src/data/publicProjects.ts`: derives `publicProjects` from the local
+    typed `projects` in `src/data/content.ts`, filtering to verified/published
+    only (`status !== 'draft' && !underReview` → SkillForge, AccessGuard) and
+    mapping to the public shape. Moved `caseStudyHref` here (pure helper).
+  - `src/sections/Projects.tsx`: now reads `publicProjects` (no API hook, no
+    loading/error/retry network states). Search, case-study routing, not-found,
+    focus management, and styling preserved. Copy updated to reflect local
+    verified data.
+  - `src/components/ProjectCard.tsx` and `ProjectCaseStudy.tsx`: import the
+    `PublicProject` type and `caseStudyHref` from the local data module; removed
+    the "portfolio API / owner dashboard" wording.
+  - The `usePublishedProjects` hook and `api/client.ts` are left intact (admin
+    and backend untouched); they are simply no longer used by the public page.
+- **Evidence Projects is backend-independent**: production bundle no longer
+  contains the public projects endpoint (`grep -c "api/v1/projects"
+  dist/assets/index-*.js` → **0**), while admin endpoints remain bundled
+  (`api/v1/admin` → 1).
+- **Checks (actual results)**: `npx tsc -b` clean; `npm run lint` clean;
+  `npm run build` clean. Backend `pytest -q` → 39 passed, 1 warning. No browser
+  automation performed.
+- **Not changed**: backend, database, migrations, admin console, contact, assets.
+- **Files changed**: `src/data/publicProjects.ts` (new), `src/sections/Projects.tsx`,
+  `src/components/ProjectCard.tsx`, `src/components/ProjectCaseStudy.tsx`,
+  `PROJECT_STATUS.md`.
+- **Remaining gaps**: GitHub/demo URLs still not present in verified content (not
+  invented). Browser-level confirmation not performed.

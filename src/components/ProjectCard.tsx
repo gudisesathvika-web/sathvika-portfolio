@@ -1,8 +1,8 @@
-import { type PublishedProject, caseStudyHref } from '../api/client'
+import { type PublicProject, caseStudyHref } from '../data/publicProjects'
 import { ArrowRightIcon } from './icons'
 
 interface ProjectCardProps {
-  project: PublishedProject
+  project: PublicProject
   index?: number
 }
 
@@ -32,7 +32,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
       <div className="project-card__footer">
         <span className="project-card__no-links">
-          From the published portfolio feed
+          Verified project
         </span>
         <a
           className="btn project-card__cta"

@@ -1,17 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { PublishedProject } from '../api/client'
+import { publicProjects, type PublicProject } from '../data/publicProjects'
 import { SectionShell } from '../components/SectionShell'
 import { ProjectCard } from '../components/ProjectCard'
 import { ProjectCaseStudy } from '../components/ProjectCaseStudy'
 import { SearchIcon, CloseIcon } from '../components/icons'
 import { useCaseStudyRoute } from '../hooks/useCaseStudyRoute'
-import { usePublishedProjects } from '../hooks/usePublishedProjects'
 
 /**
- * Combined, lower-cased text a published project can be matched against.
- * The API exposes title, direction, summary, and stack — search adapts to that.
+ * Combined, lower-cased text a project can be matched against. Search spans
+ * title, direction, summary, and stack.
  */
-function searchableText(project: PublishedProject): string {
+function searchableText(project: PublicProject): string {
   return [project.title, project.direction, project.summary, ...project.stack]
     .join(' ')
     .toLowerCase()
@@ -20,22 +19,21 @@ function searchableText(project: PublishedProject): string {
 export function Projects() {
   const [query, setQuery] = useState('')
   const caseStudyId = useCaseStudyRoute()
-  const { projects, loading, error, retry } = usePublishedProjects()
 
   const currentCaseStudy = useMemo(
-    () => projects.find((p) => p.id === caseStudyId) ?? null,
-    [projects, caseStudyId],
+    () => publicProjects.find((p) => p.id === caseStudyId) ?? null,
+    [caseStudyId],
   )
   const showingCaseStudy = caseStudyId !== null
   const showingNotFound = showingCaseStudy && currentCaseStudy === null
 
   const normalizedQuery = query.trim().toLowerCase()
   const results = useMemo(() => {
-    if (!normalizedQuery) return projects
-    return projects.filter(
-      (project) => searchableText(project).includes(normalizedQuery),
+    if (!normalizedQuery) return publicProjects
+    return publicProjects.filter((project) =>
+      searchableText(project).includes(normalizedQuery),
     )
-  }, [projects, normalizedQuery])
+  }, [normalizedQuery])
 
   const isFiltering = normalizedQuery.length > 0
 
@@ -69,7 +67,7 @@ export function Projects() {
       index="02"
       kicker="Projects"
       title="Work, told properly."
-      lede="Published projects are served live from the portfolio API. Drafts are never shown publicly. Search below by name, direction, summary, or stack."
+      lede="Verified projects, described honestly. Search below by name, direction, summary, or stack."
     >
       {showingNotFound ? (
         <div className="projects__case-study">
@@ -85,8 +83,8 @@ export function Projects() {
               Case study not found
             </h1>
             <p className="case-study__lede">
-              This case study is either unpublished or unavailable. It is never
-              shown from draft content — only published projects are reachable.
+              This case study is either unpublished or unavailable. Only
+              verified projects are reachable here.
             </p>
           </div>
         </div>
@@ -99,8 +97,7 @@ export function Projects() {
           <div className="projects__lib-head">
             <h2 className="projects__lib-title">Project library</h2>
             <p className="projects__lib-lede">
-              Published projects from the portfolio API, newest first in the
-              feed order. Searchable and keyboard accessible.
+              Verified projects. Searchable and keyboard accessible.
             </p>
           </div>
 
@@ -115,7 +112,7 @@ export function Projects() {
                 type="search"
                 className="projects__search-input"
                 placeholder="Filter by name or tag…"
-                aria-label="Search published projects by name, summary, or stack"
+                aria-label="Search projects by name, summary, or stack"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
@@ -132,27 +129,12 @@ export function Projects() {
             </div>
           </div>
 
-          {error ? (
-            <div className="projects__empty">
-              <p role="alert">{error}</p>
-              <button
-                type="button"
-                className="btn btn--ghost projects__reset"
-                onClick={retry}
-              >
-                Retry loading projects
-              </button>
-            </div>
-          ) : loading ? (
-            <p className="projects__count" role="status" aria-live="polite">
-              Loading published projects…
-            </p>
-          ) : results.length === 0 ? (
+          {results.length === 0 ? (
             <div className="projects__empty">
               <p>
                 {isFiltering
-                  ? 'No published projects match your search.'
-                  : 'No published projects yet. Published work will appear here.'}
+                  ? 'No projects match your search.'
+                  : 'No verified projects yet. Verified work will appear here.'}
               </p>
               {isFiltering && (
                 <button
@@ -168,7 +150,7 @@ export function Projects() {
             <>
               <p className="projects__count" aria-live="polite">
                 {results.length} {results.length === 1 ? 'project' : 'projects'}
-                {isFiltering ? ' match your search.' : ' published.'}
+                {isFiltering ? ' match your search.' : ' shown.'}
               </p>
               <ul id="projects__list" className="projects__grid" role="list">
                 {results.map((project, index) => (
