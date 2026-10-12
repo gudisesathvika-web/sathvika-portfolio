@@ -607,3 +607,10 @@ Admin console locally: run the backend + `npm run dev`, then open `http://127.0.
 - **Automated checks**: frontend lint clean, tsc clean, build clean. Backend tests 39 passed, 1 warning. No browser automation performed.
 - **Deployment**: free-tier targets documented (Vercel/Render/Postgres) with env guidance, CORS/cookies, contact mock default, no secrets committed. Deployment not executed.
 - **Findings**: Projects API dependency exists (Phase 26 not reflected locally). Recommend completing local-data refactor for Projects (low-risk, preserves search/case studies) or document API requirement. No low-risk cosmetic fixes necessary; timebox limited to audit.
+
+## Status summary (end of Phase 27)
+- Branch master @ 1e7e09a, working tree clean. Backend: 39 passed, 1 warning. Frontend: lint/tsc/build clean.
+- Assets: portrait and resume present in public/ and dist/. 
+- Public Projects: still uses API (usePublishedProjects) — decoupling to local data remains pending (low-risk). 
+- Contact: honest fallbacks, no fabricated links. 
+- No browser automation performed; deployment not executed. Portfolio is build-stable but Projects requires API unless refactored.
