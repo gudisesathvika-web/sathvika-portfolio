@@ -652,3 +652,49 @@ Admin console locally: run the backend + `npm run dev`, then open `http://127.0.
   `PROJECT_STATUS.md`.
 - **Remaining gaps**: GitHub/demo URLs still not present in verified content (not
   invented). Browser-level confirmation not performed.
+
+## Phase 29 — Real Browser Smoke Test
+
+- **Repo state (start)**: master @ `3c0b26f`, working tree clean.
+- **Browser/tooling**: Google Chrome 154.0.8037.98, headless=new, driven via the
+  DevTools Protocol (Node 24 + global WebSocket). Frontend served by Vite dev
+  (`http://127.0.0.1:5174` — 5173 was occupied by a prior session; the fresh
+  instance was used). **Backend deliberately stopped** for the Projects checks.
+- **Viewports**: desktop 1280×900; mobile 390×844 @ DPR 2 (emulated).
+- **Screenshots captured** (for owner review, not visually inspected by the
+  agent): `desktop-home.png`, `case-skillforge.png`, `mobile-home.png` in
+  `C:/Users/sathv/AppData/Local/Temp/opencode/p29/`.
+- **Flows actually tested (DOM-evaluated in the real browser)**:
+  1. Homepage renders: title "Sathvika Gudise — AI Engineering Portfolio"; hero
+     + all sections present (`about, projects, experience, skills, achievements,
+     contact`). Portrait `<img>` loads (`/portrait/sathvika-sketch.png`, 1254×1254,
+     `naturalWidth>0`).
+  2. Projects renders with the **backend stopped**; `Network` shows
+     `API_REQUESTS=[]` — no `/api/` request. Cards: SkillForge, AccessGuard.
+  3. Search test: typing "accessibility" → only AccessGuard; count read
+     "1 project match your search." Search filters correctly.
+  4. Case study `#cases/skillforge` opens (title, back link `#projects`,
+     sections: problem/solution/contribution/architecture/challenges/who-it-is-for/
+     technical-stack/content-source); back navigation returns to the project grid.
+  5. Unknown `#cases/does-not-exist` → "Case study not found" state.
+  6. Resume: direct `HEAD /resume/sathvika-gudise-resume.pdf` → `200
+     application/pdf`; all resume actions target that path.
+  7. Experience and Achievements sections render (present in DOM).
+  8. Contact: honest fallback present (`hasNotConfigured: true`), 0 `mailto:` and
+     0 external links — no fabricated channels.
+  9. Mobile 390px: no horizontal overflow (`scrollWidth === innerWidth`), mobile
+     menu toggle present.
+- **Console/network findings**: first run showed one `404 /favicon.ico` (no
+  favicon existed). After the fix, `CONSOLE=[]`, no 404. Remaining
+  `net::ERR_ABORTED Fetch` entries are the `useAssetStatus` HEAD probes being
+  cancelled on effect cleanup (React StrictMode) — benign; the assets return 200.
+- **Defect found and fixed**: missing favicon → added `public/favicon.svg`
+  (brand tokens: `#05070d` bg, `#56d4ff` accent, "SG" monogram) and a
+  `<link rel="icon" type="image/svg+xml" href="/favicon.svg">` in `index.html`.
+  Confirmed in `dist/`.
+- **Checks after change**: `npx tsc -b` clean; `npm run lint` clean;
+  `npm run build` clean (`dist/favicon.svg` emitted and referenced).
+- **Remaining issues / blockers**: no live database/email provider (Projects and
+  contact do not need them now); deploy not performed; no verified GitHub/demo
+  project URLs in content (none invented).
+- **Files changed**: `public/favicon.svg` (new), `index.html`, `PROJECT_STATUS.md`.
