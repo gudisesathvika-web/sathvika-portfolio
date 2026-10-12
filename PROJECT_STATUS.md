@@ -938,3 +938,10 @@ Committed locally. **Not pushed** (per local-only instruction).
 - Horizontal space used more efficiently; no fixed clipping, descriptions wrap naturally. All 13 projects preserved.
 - Checks: tsc/lint/build clean. 0 api/v1/projects.
 - Commit: fa23bf9 (local). Not pushed/deployed.
+
+## Phase 41
+- Served fresh preview (4174) with current build (index-BGHjN_zY.js + index-jx0zhgqJ.css).
+- 1440px: grid 3 columns (264px each, gridWidth 832), card 264x435, padding 17.28px top/bottom, min-height auto, desc ~4.0 lines, actions offset 332px (bottom-aligned). CardCount 13.
+- 1024px: 2 columns (406px each).
+- 390px (mobile): 1 column (350px).
+- Source/build match compact CSS. Previous "unchanged look" consistent with stale cache/viewing different build. No CSS change made in this phase.
