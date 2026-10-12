@@ -392,3 +392,32 @@
     border-radius: var(--radius);
   }
 }
+
+.case-study--compact .case-study__body {
+  padding: 1.25rem 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.case-study__block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.case-study__block-title {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.case-study__text {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-2);
+  max-width: 48rem;
+}
