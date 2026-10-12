@@ -577,3 +577,12 @@ Admin console locally: run the backend + `npm run dev`, then open `http://127.0.
 2. Configure a real email provider with a free tier (e.g. Brevo/Resend/SendGrid), set the contact environment variables (never commit secrets), verify external delivery with a small test in a safe environment, and update provider implementation if needed. Do **not** claim delivery unless verified.
 3. Browser-test the full loop: contact form submission success/failure states, mobile layout, search/filter, card → case study, admin workflows (no automation here).
 4. Then: skills/experience/achievement editing behind the owner gate, password-reset email delivery, contact delivery finalization, assets, and deployment.
+
+## Phase 23 — Resume Preview and Download
+
+- **Branch/commit**: master @ acaab1d (f986e96 after asset commit). Working tree clean.
+- **Resume asset**: public/resume/Sathvika@AIML.pdf copied to public/resume/sathvika-gudise-resume.pdf (canonical path matches content.assets.resume.path). Both present; build includes sathvika-gudise-resume.pdf in dist/resume/.
+- **Page**: No dedicated Resume.tsx exists in src/sections; Resume card/linking handled by ResumeAction component (Hero, TopBar, Contact use it). Existing ResumeAction already provides preview/download with HEAD probe via useAssetStatus; asset now available → shows available/download path.
+- **Verification**: npm run lint clean; npx tsc -b clean; npm run build clean. Backend tests: 39 passed, 1 warning.
+- **Changes**: public/resume/sathvika-gudise-resume.pdf added; no code changes required (existing components already use canonical path). Committed (f986e96) and pushed.
+- **Notes**: Created canonical resume filename to match content.ts path (resume/sathvika-gudise-resume.pdf). If a dedicated Resume page is preferred, can add src/sections/Resume.tsx + route; current implementation meets requirements (preview in new tab via <a target="_blank"> and download). No browser automation performed.
