@@ -1,52 +1,52 @@
-import { useEffect, useState } from 'react'
-import { About } from './sections/About'
-import { Projects } from './sections/Projects'
-import { Experience } from './sections/Experience'
-import { Skills } from './sections/Skills'
-import { Achievements } from './sections/Achievements'
-import { Contact } from './sections/Contact'
+import { useEffect } from 'react'
+import type { ComponentType } from 'react'
+import { HomePage } from './pages/HomePage'
+import { ProjectsPage } from './pages/ProjectsPage'
+import { ResumePage } from './pages/ResumePage'
+import { ExperiencePage } from './pages/ExperiencePage'
+import { AchievementsPage } from './pages/AchievementsPage'
 import { Footer } from './components/Footer'
-import { Hero } from './components/Hero'
 import { TopBar } from './components/TopBar'
 import { AdminApp } from './components/admin/AdminApp'
+import { useHash, usePathname } from './router'
 import './styles/sections.css'
 import './styles/case-study.css'
+import './styles/pages.css'
 
-/** True when the URL points at the private owner console. */
-function isAdminRoute(): boolean {
-  const { hash, pathname } = window.location
+const ROUTES: Record<string, ComponentType> = {
+  '/projects': ProjectsPage,
+  '/resume': ResumePage,
+  '/experience': ExperiencePage,
+  '/achievements': AchievementsPage,
+}
+
+function isAdminRoute(path: string, hash: string): boolean {
   if (hash.startsWith('#/admin')) return true
-  return pathname === '/admin' || pathname === '/admin/'
+  return path === '/admin' || path === '/admin/'
 }
 
 export default function App() {
-  const [adminRoute, setAdminRoute] = useState<boolean>(isAdminRoute)
+  const path = usePathname()
+  const hash = useHash()
 
+  // Keep the scroll position sensible on route changes.
   useEffect(() => {
-    const onChange = () => setAdminRoute(isAdminRoute())
-    window.addEventListener('hashchange', onChange)
-    return () => window.removeEventListener('hashchange', onChange)
-  }, [])
+    if (!window.location.hash) window.scrollTo({ top: 0 })
+  }, [path])
 
-  if (adminRoute) {
+  if (isAdminRoute(path, hash)) {
     return <AdminApp />
   }
 
+  const Page = ROUTES[path]
+
   return (
     <>
-      <a className="skip-link" href="#about">
+      <a className="skip-link" href="#main">
         Skip to content
       </a>
       <TopBar />
-      <main>
-        <Hero />
-        <About />
-        <Projects />
-        <Experience />
-        <Skills />
-        <Achievements />
-        <Contact />
-      </main>
+      <main id="main">{Page ? <Page /> : <HomePage />}</main>
       <Footer />
     </>
   )

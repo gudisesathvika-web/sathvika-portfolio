@@ -1,31 +1,44 @@
 import { useEffect, useRef, useState } from 'react'
-import { assets, navLinks, site, featuredProjectIds, caseStudyHref } from '../data/content'
+import { navLinks, site } from '../data/content'
 import { useActiveSection } from '../hooks/useActiveSection'
 import { useMediaQuery } from '../hooks/useMediaQuery'
+import { usePathname } from '../router'
+import { Link } from './RouterLink'
 import { ResumeAction } from './ResumeAction'
 import { CloseIcon, MenuIcon } from './icons'
 import './topbar.css'
 
-const sectionIds = navLinks.map((link) => link.href.replace('#', ''))
+/** Route-aware primary navigation. */
+const NAV = [
+  { label: 'Home', to: '/', anchor: undefined as string | undefined, id: 'top' },
+  { label: 'About', to: '/', anchor: 'about', id: 'about' },
+  { label: 'Projects', to: '/projects', anchor: undefined, id: 'projects' },
+  { label: 'Resume', to: '/resume', anchor: undefined, id: 'resume' },
+  { label: 'Experience', to: '/experience', anchor: undefined, id: 'experience' },
+  { label: 'Achievements', to: '/achievements', anchor: undefined, id: 'achievements' },
+  { label: 'Contact', to: '/', anchor: 'contact', id: 'contact' },
+]
+
+const sectionIds = navLinks
+  .filter((link) => link.href.startsWith('#'))
+  .map((link) => link.href.replace('#', ''))
 
 /**
  * Compact sticky navigation.
- * Desktop: inline links + resume action.
- * Mobile: menu button toggling a full-width panel (Escape closes it,
- * body scroll locks, closing is automatic when a link is followed).
+ * Desktop: inline route links + resume action.
+ * Mobile: menu button toggling a full-width panel.
  */
 export function TopBar() {
   const [open, setOpen] = useState(false)
   const isCompact = useMediaQuery('(max-width: 860px)')
   const activeSection = useActiveSection(sectionIds)
+  const path = usePathname()
   const toggleRef = useRef<HTMLButtonElement>(null)
 
-  // Close the mobile panel when leaving the compact breakpoint.
   useEffect(() => {
     if (!isCompact) setOpen(false)
   }, [isCompact])
 
-  // Escape closes the panel and returns focus to the toggle.
   useEffect(() => {
     if (!open) return
     const onKeyDown = (event: KeyboardEvent) => {
@@ -42,15 +55,18 @@ export function TopBar() {
     }
   }, [open])
 
-  const isCurrent = (id: string) => activeSection === id
+  const isCurrent = (item: (typeof NAV)[number]) => {
+    if (item.anchor) return path === '/' && activeSection === item.anchor
+    return path === item.to && !item.anchor
+  }
 
   return (
     <header className="topbar">
       <div className="container topbar__inner">
-        <a
+        <Link
           className="topbar__brand"
-          href="#top"
-          aria-label={`${site.name} — back to top`}
+          to="/"
+          aria-label={`${site.name} — home`}
         >
           <span className="topbar__monogram" aria-hidden="true">
             {site.initials}
@@ -59,38 +75,21 @@ export function TopBar() {
             <span className="topbar__brand-name">{site.name}</span>
             <span className="topbar__brand-role">{site.identity}</span>
           </span>
-        </a>
+        </Link>
 
         <nav className="topbar__nav" aria-label="Primary">
           <ul>
-            {navLinks.map((link) => {
-              const id = link.href.replace('#', '')
-              return (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    aria-current={isCurrent(id) ? 'true' : undefined}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              )
-            })}
-            {featuredProjectIds.map((id) => {
-              const href = caseStudyHref(id)
-              const label = featuredProjectIds.indexOf(id) + 1
-              return (
-                <li key={href}>
-                  <a
-                    href={href}
-                    aria-current={false}
-                  >
-                    <span className="sr-only">Case study: </span>
-                    {label < 10 ? '0' : ''}{label}
-                  </a>
-                </li>
-              )
-            })}
+            {NAV.map((item) => (
+              <li key={item.label}>
+                <Link
+                  to={item.to}
+                  anchor={item.anchor}
+                  aria-current={isCurrent(item) ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
 
@@ -110,7 +109,6 @@ export function TopBar() {
         </div>
       </div>
 
-      {/* Mobile panel */}
       <div
         id="mobile-menu"
         className={`topbar__mobile${open ? ' is-open' : ''}`}
@@ -118,31 +116,25 @@ export function TopBar() {
       >
         <nav aria-label="Mobile">
           <ul>
-            {navLinks.map((link, index) => {
-              const id = link.href.replace('#', '')
-              return (
-                <li key={link.href} style={{ '--i': index } as React.CSSProperties}>
-                  <a
-                    href={link.href}
-                    aria-current={isCurrent(id) ? 'true' : undefined}
-                    onClick={() => setOpen(false)}
-                  >
-                    <span className="topbar__mobile-index" aria-hidden="true">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    {link.label}
-                  </a>
-                </li>
-              )
-            })}
+            {NAV.map((item, index) => (
+              <li key={item.label} style={{ '--i': index } as React.CSSProperties}>
+                <Link
+                  to={item.to}
+                  anchor={item.anchor}
+                  aria-current={isCurrent(item) ? 'page' : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="topbar__mobile-index" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
         <div className="topbar__mobile-footer">
           <ResumeAction variant="primary" />
-          <p className="topbar__mobile-note">
-            Portrait &amp; resume files live in{' '}
-            <code>public/{assets.resume.path.split('/')[0]}/</code>
-          </p>
         </div>
       </div>
     </header>

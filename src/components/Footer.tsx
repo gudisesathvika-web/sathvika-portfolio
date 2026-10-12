@@ -1,5 +1,15 @@
-import { footer, navLinks, site } from '../data/content'
+import { footer, site } from '../data/content'
+import { Link } from './RouterLink'
 import './footer.css'
+
+const FOOTER_NAV = [
+  { label: 'Home', to: '/' },
+  { label: 'Projects', to: '/projects' },
+  { label: 'Resume', to: '/resume' },
+  { label: 'Experience', to: '/experience' },
+  { label: 'Achievements', to: '/achievements' },
+  { label: 'Contact', to: '/', anchor: 'contact' },
+]
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -14,9 +24,11 @@ export function Footer() {
 
         <nav className="footer__nav" aria-label="Footer">
           <ul>
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <a href={link.href}>{link.label}</a>
+            {FOOTER_NAV.map((link) => (
+              <li key={link.label}>
+                <Link to={link.to} anchor={link.anchor}>
+                  {link.label}
+                </Link>
               </li>
             ))}
           </ul>

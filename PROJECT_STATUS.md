@@ -698,3 +698,69 @@ Admin console locally: run the backend + `npm run dev`, then open `http://127.0.
   contact do not need them now); deploy not performed; no verified GitHub/demo
   project URLs in content (none invented).
 - **Files changed**: `public/favicon.svg` (new), `index.html`, `PROJECT_STATUS.md`.
+
+## Phase 31 — Portfolio Redesign (visible) + dedicated routes
+
+### Why it still looked like the old site
+The app rendered every section on one scrolling page (`Hero/About/Projects/
+Experience/Skills/Achievements/Contact`) and nav used same-page `#anchors`. There
+were no separate destinations, so the four "cards" and route-based navigation
+were never actually delivered visually.
+
+### Visible changes made
+- **New homepage**: polished hero (`HomeHero`) with the approved portrait at its
+  real path (`public/portrait/sathvika-sketch.png`), name, professional intro,
+  and quick facts; reuses the existing verified `About` and `Contact` sections;
+  adds a prominent four-card section (`HomeCards`).
+- **Four navigation cards** (Projects, Resume, Experience, Achievements): large,
+  bordered, hover/focus states with a translating arrow indicator.
+- **Dedicated routes** using a tiny custom SPA router (`src/router.ts` +
+  `src/components/RouterLink.tsx`, no new dependencies):
+  - `/projects` → search + case studies preserved (`ProjectsPage`)
+  - `/resume` → in-page PDF preview + "Preview resume" (new tab) + "Download PDF"
+  - `/experience` → timeline (`ExperiencePage`)
+  - `/achievements` → milestones (`AchievementsPage`)
+  - Direct URL loading and browser back/forward work (`pushState` + `popstate`).
+- **TopBar/Footer** rewritten to route-aware links (Home/About/Projects/Resume/
+  Experience/Achievements/Contact) with `aria-current`.
+- **Palette/typography**: existing dark-navy tokens (`--ink-950`, restrained cyan
+  `--accent #56d4ff`), generous spacing; new `src/styles/pages.css`.
+- Admin console (`#/admin`) and case-study hash (`#cases/<id>`) preserved.
+- No invented links/metrics; no backend/DB/auth changes.
+
+### Files changed
+- New: `src/router.ts`, `src/components/RouterLink.tsx`,
+  `src/components/HomeHero.tsx`, `src/components/HomeCards.tsx`,
+  `src/pages/HomePage.tsx`, `ProjectsPage.tsx`, `ResumePage.tsx`,
+  `ExperiencePage.tsx`, `AchievementsPage.tsx`, `src/styles/pages.css`.
+- Modified: `src/App.tsx`, `src/components/TopBar.tsx`, `src/components/Footer.tsx`.
+- Removed: nothing functional (old `Hero.tsx`/`Projects` section kept — `Projects`
+  section is now the `/projects` page; `Hero` is unused by the homepage but left
+  in place).
+
+### Verification (real browser, Chrome 154 headless via CDP)
+Served the **production build** with `vite preview` on `127.0.0.1:4180`; backend
+stopped. Results:
+- Homepage: hero title renders, portrait `<img>` loads (`naturalWidth>0`), and all
+  four cards present with hrefs `/projects`, `/resume`, `/experience`, `/achievements`.
+- Clicking each card navigates to that route and renders its content
+  (`/projects`→2 project cards, `/resume`→PDF preview frame, `/experience`→1
+  timeline item, `/achievements`→4 entries).
+- Back navigation: `/` → click → `/projects` → `history.back()` → `/` (hero + 4
+  cards restored).
+- Direct loads of all four routes return the correct page (no 404, no not-found).
+- Admin `#/admin` still renders the owner sign-in.
+- Console: one `500 /api/v1/auth/me` — expected, emitted only by the admin console
+  with the backend stopped (public pages issue **no** API requests; `API` list
+  contains only that admin ping).
+- Screenshots: `home.png`, `page-projects.png`, `page-resume.png`,
+  `page-experience.png`, `page-achievements.png` in
+  `C:/Users/sathv/AppData/Local/Temp/opencode/p31/` (not visually inspected by the
+  agent; verified via DOM evaluation).
+
+### Build checks
+`npx tsc -b` clean; `npm run lint` clean (0 warnings); `npm run build` clean.
+
+### Remaining gaps / blockers
+No GitHub/demo project URLs in verified content (not invented). No live DB/email
+provider. Deploy not performed.
