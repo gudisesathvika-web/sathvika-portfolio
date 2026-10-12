@@ -67,7 +67,7 @@ export function Projects() {
       index="02"
       kicker="Projects"
       title="Work, told properly."
-      lede="Verified projects, described honestly. Search below by name, direction, summary, or stack."
+      lede="Projects, described honestly. Search below by name, direction, summary, or stack — items still being verified are labelled."
     >
       {showingNotFound ? (
         <div className="projects__case-study">
@@ -97,7 +97,7 @@ export function Projects() {
           <div className="projects__lib-head">
             <h2 className="projects__lib-title">Project library</h2>
             <p className="projects__lib-lede">
-              Verified projects. Searchable and keyboard accessible.
+              Every documented project. Searchable and keyboard accessible.
             </p>
           </div>
 
@@ -134,7 +134,7 @@ export function Projects() {
               <p>
                 {isFiltering
                   ? 'No projects match your search.'
-                  : 'No verified projects yet. Verified work will appear here.'}
+                  : 'No projects yet. Documented work will appear here.'}
               </p>
               {isFiltering && (
                 <button

@@ -14,9 +14,13 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           {String(index + 1).padStart(2, '0')}
         </span>
         <div className="project-card__badges">
-          <span className="tag" style={{ color: 'var(--accent)' }}>
-            Published
-          </span>
+          {project.underReview ? (
+            <span className="tag tag--review">Under review</span>
+          ) : (
+            <span className="tag" style={{ color: 'var(--accent)' }}>
+              Verified
+            </span>
+          )}
         </div>
       </header>
 
@@ -32,7 +36,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
       <div className="project-card__footer">
         <span className="project-card__no-links">
-          Verified project
+          {project.underReview ? 'Details being confirmed' : 'Verified project'}
         </span>
         <a
           className="btn project-card__cta"

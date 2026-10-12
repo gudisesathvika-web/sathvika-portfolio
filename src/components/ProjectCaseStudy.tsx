@@ -46,6 +46,13 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
             </li>
           ))}
         </ul>
+        {project.underReview && (
+          <p className="case-study__review-note">
+            <span className="tag tag--review">Under review</span>
+            Details for this project are still being confirmed. It is shown at a
+            high level, without invented specifics.
+          </p>
+        )}
       </header>
 
       <div className="case-study__body">
@@ -123,9 +130,9 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
           <h2 className="case-study__section-label">Content source</h2>
           <div className="case-study__section-inner">
             <p className="case-study__muted">
-              This case study is drawn from the portfolio's verified content.
-              Sections only appear when verified content exists — nothing is
-              invented.
+              {project.underReview
+                ? 'This project is drawn from the portfolio’s verified content and is still being confirmed. It is described without invented specifics until those details are validated.'
+                : 'This case study is drawn from the portfolio’s verified content. Sections only appear when verified content exists — nothing is invented.'}
             </p>
           </div>
         </section>

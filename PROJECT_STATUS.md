@@ -831,3 +831,69 @@ provider. Deploy not performed.
 ### Checks
 `npx tsc -b` clean; `npm run lint` clean; `npm run build` clean (`dist/_redirects`
 emitted).
+
+## Phase 33 — Restore All Portfolio Projects (LOCAL-ONLY)
+
+> **Local-only mode**: no push/deploy. Changes committed locally only.
+
+### Project inventory (from local evidence)
+Evidence sources: `src/data/content.ts` (featured `projects` + `projectLibrary`),
+`src/data/constellation.ts`, `RILL-WALKTHROUGH.md`, `PROJECT_STATUS.md`,
+git history. The GitHub repository is deleted and was **not** consulted.
+
+**Found and added to the public page (8):**
+| # | Project | State | Direction |
+|---|---------|-------|-----------|
+| 1 | SkillForge | Verified | AI-powered learning platform |
+| 2 | AccessGuard | Verified | Web accessibility auditing |
+| 3 | NeuraHeal | Under review | Server monitoring and anomaly detection |
+| 4 | AI Code Review Assistant | Under review | AI-assisted code review |
+| 5 | CollabGraph | Under review | Research collaboration network analysis |
+| 6 | Smart ID Verification and Forgery Detection | Under review | ID verification and forgery detection |
+| 7 | AquaML | Under review | Aquaculture monitoring and prediction |
+| 8 | CropLens | Under review | Crop / agriculture monitoring |
+
+Previously the public page filtered out every `underReview` project, so it showed
+only SkillForge + AccessGuard (2 of 8).
+
+**Requested names NOT found anywhere locally → not added (no invented data):**
+Email Automator; CardioRisk-AI; Voice-Enabled Expense Manager; CrisisMind;
+ScoutIQ; Personal Expense Tracker (Java). Aliases "GitReviewAI" (→ AI Code Review
+Assistant), "AI Prawn Cultivation" (→ AquaML), "Soil Estimation" (→ CropLens) also
+do not appear verbatim; only the base names above are locally supported.
+
+### Changes
+- **`src/data/publicProjects.ts`**: now merges featured `projects` + `projectLibrary`
+  (still excluding `status: 'draft'`) and carries an `underReview` flag. The
+  internal "— pending verification" meta-suffix is stripped from display titles
+  (the review state is shown as a badge instead). Still fully local — no API.
+- **`src/components/ProjectCard.tsx`**: badge now reads **Verified** vs
+  **Under review**; footer note reflects the state.
+- **`src/components/ProjectCaseStudy.tsx`**: shows an "Under review" notice in the
+  header and honest content-source copy for unverified projects.
+- **`src/sections/Projects.tsx`**: lede/library copy no longer claims everything is
+  "verified"; accurately says items still being verified are labelled.
+
+### Verification (real browser, Chrome headless via CDP, production build on :4181)
+- `/projects` shows **8 cards** with correct titles/directions and badges
+  (2 Verified, 6 Under review).
+- Search "aqua" → only **AquaML** ("1 project match your search").
+- Case studies: `#cases/neuraheal` and `#cases/collabgraph` open with the
+  **Under review** notice; `#cases/skillforge` opens **without** it. Case-study
+  navigation and back link intact.
+- **No `/api/` resource requests** on `/projects`; console clean (no errors/warnings).
+- `npx tsc -b` clean; `npm run lint` clean; `npm run build` clean.
+
+### Missing information (honest gaps)
+- Project-level GitHub/demo URLs: none verified → project `links` stay empty.
+- The 6 unfound project names above require owner-supplied evidence to add.
+- Contact email/LinkedIn/GitHub still unset.
+- No backend/DB involved; public page remains local-data only.
+
+### Files changed
+`src/data/publicProjects.ts`, `src/components/ProjectCard.tsx`,
+`src/components/ProjectCaseStudy.tsx`, `src/sections/Projects.tsx`,
+`PROJECT_STATUS.md`.
+
+### Git
+Committed locally. **Not pushed** (per local-only instruction).
