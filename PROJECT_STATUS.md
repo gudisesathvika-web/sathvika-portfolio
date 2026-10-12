@@ -764,3 +764,70 @@ stopped. Results:
 ### Remaining gaps / blockers
 No GitHub/demo project URLs in verified content (not invented). No live DB/email
 provider. Deploy not performed.
+
+## Phase 32 — Visual Review and Launch Readiness
+
+- **Repo state (start)**: master @ `e381ff6`, working tree clean.
+- **Method (honesty note)**: Chrome 154 headless via CDP against the **production
+  build** (`vite preview`, `127.0.0.1:4180`). The agent **cannot view images**, so
+  "visual" review was done via computed layout metrics (bounding boxes, grid
+  templates, overflow detection, image rects, color-contrast ratios) plus
+  screenshots saved for the owner — not by eyeballing pixels.
+
+### Pages / viewports reviewed
+- Routes measured at widths **1440, 1280, 1024, 900, 768, 480, 390, 360 px**:
+  `/`, `/projects`, `/resume`, `/experience`, `/achievements`.
+- Homepage desktop 1440×900 and mobile 390×844@2x; `/projects` + `#cases/skillforge`;
+  `/resume`.
+
+### Findings
+- **No horizontal overflow** on any route at any tested width.
+- Homepage desktop: hero grid `658px / 486px`; portrait frame **486×486 (square,
+  no distortion/crop)**; four cards 600px wide with **equal heights (137px)** and
+  correct 2×2 hierarchy; portrait caption does not overlap the About section
+  (caption bottom 757 < about top 867).
+- Homepage mobile: single-column grid (350px), portrait 350px, four cards 350px,
+  menu toggle present.
+- **Contrast (WCAG)**: body/blurb/lede text ≈ **9.8:1**, accent text ≈ **11.8:1** —
+  well above AA.
+- Case study `#cases/skillforge`: article present, back link visible
+  (`inline-flex`, `#projects`), 8 sections.
+- Resume page: preview frame 1214×702; "Preview resume" → `/resume/sathvika-gudise-resume.pdf`
+  (new tab); download link carries `download` attribute.
+- **Console clean** across routes (no errors/warnings).
+- No low-risk visual defects found → **no visual code changes required**.
+
+### Content / actions
+- Assets verified on disk: `public/portrait/sathvika-sketch.png` (2.66 MB) and
+  `public/resume/sathvika-gudise-resume.pdf` (187 KB, valid `%PDF-` header).
+- Verified external links present: book-chapter **DOI**
+  `https://doi.org/10.4018/979-8-3373-0194-5.ch017` and Comerica challenge **YouTube**
+  `https://www.youtube.com/watch?v=HMnNoPQfzdI`. Project case-study `links` are
+  empty (none invented).
+- **Contact gap**: `contact.email` and `contact.links` are empty → Contact shows the
+  honest "Not configured" state. No email/LinkedIn/GitHub URLs supplied, so none
+  were added.
+
+### Deployment readiness
+- Static build output: `dist/` (adds `_redirects`, `favicon.svg`, `portrait/`,
+  `resume/`, hashed `assets/`).
+- **SPA fallback required** for direct loads of `/projects`, `/resume`,
+  `/experience`, `/achievements`. Added host configs:
+  - `vercel.json` (framework `vite`, `outputDirectory: dist`, rewrite `/(.*)` →
+    `/index.html`; static files still win over rewrites on Vercel).
+  - `public/_redirects` (`/*  /index.html  200`) for Netlify / Cloudflare Pages;
+    confirmed copied to `dist/_redirects`.
+- **Recommendation**: deploy `dist/` to **Vercel Free** (or Netlify Free) as a
+  static site. No server needed for the public pages (they make **no** API calls).
+- Secret hygiene: `.gitignore` excludes `.env`, `.env.local`, `.env.*.local`;
+  `.env.example` files remain trackable; no secrets committed. `VITE_API_URL` is
+  only needed if the admin/contact backend is deployed separately (public browsing
+  does not require it). Contact form requires a live backend + email provider.
+- **Not deployed** (per instruction).
+
+### Files changed
+- `public/_redirects` (new), `vercel.json` (new), `PROJECT_STATUS.md`.
+
+### Checks
+`npx tsc -b` clean; `npm run lint` clean; `npm run build` clean (`dist/_redirects`
+emitted).
