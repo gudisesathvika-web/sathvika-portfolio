@@ -36,21 +36,18 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         ))}
       </ul>
 
-        <div className="project-card__footer">
+      <div className="project-card__actions">
         {repoLink ? (
-          <ul className="project-card__links">
-            <li>
-              <a
-                href={repoLink.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open the ${project.title} GitHub repository`}
-              >
-                <GitHubIcon size={14} />
-                GitHub Repository
-              </a>
-            </li>
-          </ul>
+          <a
+            className="project-card__action-link"
+            href={repoLink.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open the ${project.title} GitHub repository`}
+          >
+            <GitHubIcon size={14} />
+            GitHub Repository
+          </a>
         ) : (
           <span className="project-card__no-links">Repository not linked</span>
         )}
