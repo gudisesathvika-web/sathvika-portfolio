@@ -254,6 +254,9 @@
 
 .case-study__link-list a {
   color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   transition: color var(--dur) var(--ease-out);
 }
 
@@ -301,11 +304,32 @@
   color: var(--text-1);
 }
 
+.case-study__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.case-study__repo {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.case-study__repo .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .case-study__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin-top: 0.3rem;
+  margin-top: 0.6rem;
 }
 
 .case-study__tags li {

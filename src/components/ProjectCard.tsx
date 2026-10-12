@@ -1,5 +1,5 @@
 import { type PublicProject, caseStudyHref } from '../data/publicProjects'
-import { ArrowRightIcon } from './icons'
+import { ArrowRightIcon, GitHubIcon } from './icons'
 
 interface ProjectCardProps {
   project: PublicProject
@@ -7,6 +7,8 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
+  const repoLink = project.links.find((link) => /github\.com/i.test(link.url))
+
   return (
     <li className="project-card">
       <header className="project-card__head">
@@ -34,10 +36,24 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         ))}
       </ul>
 
-      <div className="project-card__footer">
-        <span className="project-card__no-links">
-          {project.underReview ? 'Details being confirmed' : 'Verified project'}
-        </span>
+        <div className="project-card__footer">
+        {repoLink ? (
+          <ul className="project-card__links">
+            <li>
+              <a
+                href={repoLink.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open the ${project.title} GitHub repository`}
+              >
+                <GitHubIcon size={14} />
+                GitHub Repository
+              </a>
+            </li>
+          </ul>
+        ) : (
+          <span className="project-card__no-links">Repository not linked</span>
+        )}
         <a
           className="btn project-card__cta"
           href={caseStudyHref(project.id)}

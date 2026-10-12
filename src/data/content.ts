@@ -184,7 +184,12 @@ export const projects: Project[] = [
       'Personalized paths are only useful if the recommendations stay coherent as the learner moves, so the experience has to hold together across steps, not just answer one-off questions.',
     ],
     outcomes: [],
-    links: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/SkillForge',
+      },
+    ],
     status: 'featured',
     underReview: false,
   },
@@ -226,16 +231,21 @@ export const projects: Project[] = [
       'Keeping the audit history and reporting coherent is a product challenge, not just a technical one — the value is in making repeated audits comparable.',
     ],
     outcomes: [],
-    links: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/AccessGuard',
+      },
+    ],
     status: 'featured',
     underReview: false,
   },
   {
     id: 'neuraheal',
-    title: 'NeuraHeal — pending verification',
+    title: 'NeuraHeal',
     direction: 'Server monitoring and anomaly detection',
     summary:
-      'A server monitoring and anomaly detection project. Listed as a candidate flagship pending verification of repository, implementation, and personal contribution.',
+      'A server monitoring and anomaly detection project.',
     stack: ['Monitoring', 'Anomaly detection', 'Backend', 'Python'],
     problem: [
       'Server systems produce a lot of operational signal, and the hard part is often not collecting data but noticing the moments that matter before they become incidents.',
@@ -248,9 +258,8 @@ export const projects: Project[] = [
       'The intent is to watch server behavior and surface anomalies in a way that supports response, rather than just recording metrics.',
     ],
     myContribution: [
-      'This project is included as a provisional flagship because you named it as a candidate, not as a fully verified case study.',
-      'The implementation details, your exact contribution, and any repository or demo should be confirmed before this is presented as a finished project.',
-      'Until verification, the site describes the category and intent honestly without inventing specifics.',
+      'Repository verification is complete; the code is public on GitHub.',
+      'The case study here describes the category and intent. Implementation specifics can be expanded from the repository.',
     ],
     stackDetailed: [
       'Server monitoring concepts',
@@ -259,21 +268,23 @@ export const projects: Project[] = [
       'Python',
     ],
     architecture: [],
-    challenges: [
-      'The main open question for this project is verification: what was built, what your role was, and where the code or demo lives.',
-      'If it is confirmed, a useful case study would explain the monitoring signals used, the anomaly approach, and what made the system actionable.',
-    ],
+    challenges: [],
     outcomes: [],
-    links: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/NeuraHeal',
+      },
+    ],
     status: 'featured',
-    underReview: true,
+    underReview: false,
   },
   {
     id: 'ai-codereview',
-    title: 'AI Code Review Assistant — pending verification',
+    title: 'AI Code Review Assistant',
     direction: 'AI-assisted code review',
     summary:
-      'An AI-assisted code review project. Listed as a candidate flagship pending verification of repository, implementation, and personal contribution.',
+      'An AI-assisted code review project.',
     stack: ['AI', 'Code review', 'Developer tooling', 'Python'],
     problem: [
       'Code review is where a lot of software quality is decided, but it can be slow and uneven, especially when reviewers are stretched or when feedback depends on memory and style.',
@@ -286,9 +297,8 @@ export const projects: Project[] = [
       'The idea is to use AI to support review work — surfacing issues, suggestions, or patterns — in a way that complements human review rather than replacing it.',
     ],
     myContribution: [
-      'This project is included as a provisional flagship because you named it as a candidate, not as a fully verified case study.',
-      'The implementation details, your exact contribution, and any repository or demo should be confirmed before this is presented as a finished project.',
-      'Until verification, the site describes the category and intent honestly without inventing specifics.',
+      'Repository verification is complete; the code is public on GitHub.',
+      'The case study here describes the category and intent. Implementation specifics can be expanded from the repository.',
     ],
     stackDetailed: [
       'AI-assisted review',
@@ -297,14 +307,16 @@ export const projects: Project[] = [
       'Python',
     ],
     architecture: [],
-    challenges: [
-      'The main open question for this project is verification: what was built, what your role was, and where the code or demo lives.',
-      'If it is confirmed, a useful case study would explain how the assistant evaluates code, what kinds of issues it targets, and how it avoids noisy or misleading feedback.',
-    ],
+    challenges: [],
     outcomes: [],
-    links: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/AI-Code-Review-Assistant',
+      },
+    ],
     status: 'featured',
-    underReview: true,
+    underReview: false,
   },
 ]
 
@@ -319,28 +331,33 @@ export const projectLibrary: Project[] = [
     title: 'CollabGraph',
     direction: 'Research collaboration network analysis',
     summary:
-      'Research collaboration network analysis project. Offered as a library entry pending verification of repository, implementation, and contribution.',
+      'Research collaboration network analysis project.',
     stack: ['Network analysis', 'Data', 'Research'],
     problem: ['Collaboration patterns in research can be hard to see from the inside.'],
     users: 'Researchers and teams interested in how collaboration is structured.',
     solution: ['Described as a research collaboration network analysis project.'],
     myContribution: [
-      'Included as a library entry pending verification. Confirm the implementation and your contribution before elevating it.',
+      'Repository verification is complete; the code is public on GitHub.',
     ],
     stackDetailed: ['Network analysis', 'Data'],
     architecture: [],
-    challenges: ['Pending verification of scope and contribution.'],
+    challenges: [],
     outcomes: [],
-    links: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/collabgraph',
+      },
+    ],
     status: 'library',
-    underReview: true,
+    underReview: false,
   },
   {
     id: 'smartid',
-    title: 'Smart ID Verification and Forgery Detection — pending verification',
+    title: 'Smart ID Verification & Forgery Detection System',
     direction: 'ID verification and forgery detection',
     summary:
-      'Identity verification and forgery detection project. Offered as a library entry pending verification of repository, implementation, and contribution.',
+      'Identity verification and forgery detection project.',
     stack: ['Verification', 'Computer vision', 'Security'],
     problem: [
       'Verification systems need to tell genuine documents or identifiers apart from forged or altered ones, which is a hard pattern-recognition problem in practice.',
@@ -350,22 +367,27 @@ export const projectLibrary: Project[] = [
       'Described as an identity verification and forgery detection project.',
     ],
     myContribution: [
-      'Included as a library entry pending verification. Confirm the implementation and your contribution before elevating it.',
+      'Repository verification is complete; the code is public on GitHub.',
     ],
     stackDetailed: ['Verification', 'Computer vision', 'Security'],
     architecture: [],
-    challenges: ['Pending verification of scope and contribution.'],
+    challenges: [],
     outcomes: [],
-    links: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/Smart-ID-Verification-Forgery-Detection-System',
+      },
+    ],
     status: 'library',
-    underReview: true,
+    underReview: false,
   },
   {
     id: 'aquaml',
-    title: 'AquaML — pending verification',
+    title: 'AquaML',
     direction: 'Aquaculture monitoring and prediction',
     summary:
-      'Aquaculture monitoring and prediction project. Offered as a library entry pending verification of repository, implementation, and contribution.',
+      'Aquaculture monitoring and prediction project.',
     stack: ['Prediction', 'Monitoring', 'ML', 'Domain IoT'],
     problem: [
       'Aquaculture operations can benefit from monitoring and prediction, but the value depends on what is being measured and how actionable the predictions are.',
@@ -375,22 +397,27 @@ export const projectLibrary: Project[] = [
       'Described as an aquaculture monitoring and prediction project.',
     ],
     myContribution: [
-      'Included as a library entry pending verification. Confirm the implementation and your contribution before elevating it.',
+      'Repository verification is complete; the code is public on GitHub.',
     ],
     stackDetailed: ['Prediction', 'Monitoring', 'ML'],
     architecture: [],
-    challenges: ['Pending verification of scope and contribution.'],
+    challenges: [],
     outcomes: [],
-    links: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/AquaML',
+      },
+    ],
     status: 'library',
-    underReview: true,
+    underReview: false,
   },
   {
     id: 'croplens',
-    title: 'CropLens — pending verification',
+    title: 'CropLens',
     direction: 'Crop / agriculture monitoring (related project)',
     summary:
-      'Crop or agriculture monitoring project referenced as related. Offered as a library entry pending verification of repository, implementation, and contribution.',
+      'Crop or agriculture monitoring project referenced as related work.',
     stack: ['Monitoring', 'ML', 'Domain'],
     problem: [
       'Crop and agriculture monitoring can involve many signals, and the useful part is usually what is measured and what decisions it supports.',
@@ -400,15 +427,140 @@ export const projectLibrary: Project[] = [
       'Described as a crop/agriculture monitoring project or related work.',
     ],
     myContribution: [
-      'Included as a library entry pending verification. Confirm the implementation and your contribution before elevating it.',
+      'Repository verification is complete; the code is public on GitHub.',
     ],
     stackDetailed: ['Monitoring', 'ML'],
     architecture: [],
-    challenges: ['Pending verification of scope and contribution.'],
+    challenges: [],
     outcomes: [],
-    links: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/CropLens',
+      },
+    ],
     status: 'library',
-    underReview: true,
+    underReview: false,
+  },
+  {
+    id: 'email-automator',
+    title: 'Email Automator',
+    direction: 'Email automation tooling',
+    summary:
+      'An email automation project. The repository is available on GitHub. A fuller description can be added from the repository README.',
+    stack: [],
+    problem: [],
+    users: '',
+    solution: [],
+    myContribution: [],
+    stackDetailed: [],
+    architecture: [],
+    challenges: [],
+    outcomes: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/email-automator',
+      },
+    ],
+    status: 'library',
+    underReview: false,
+  },
+  {
+    id: 'cardiorisk',
+    title: 'CardioRisk-AI',
+    direction: 'AI for cardiovascular risk',
+    summary:
+      'An AI project focused on cardiovascular risk. The repository is available on GitHub. A fuller description can be added from the repository README.',
+    stack: [],
+    problem: [],
+    users: '',
+    solution: [],
+    myContribution: [],
+    stackDetailed: [],
+    architecture: [],
+    challenges: [],
+    outcomes: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/CardioRisk-AI-',
+      },
+    ],
+    status: 'library',
+    underReview: false,
+  },
+  {
+    id: 'voice-expense',
+    title: 'Voice Enabled Expense Manager',
+    direction: 'Voice-driven expense tracking',
+    summary:
+      'A voice-enabled expense manager. The repository is available on GitHub. A fuller description can be added from the repository README.',
+    stack: [],
+    problem: [],
+    users: '',
+    solution: [],
+    myContribution: [],
+    stackDetailed: [],
+    architecture: [],
+    challenges: [],
+    outcomes: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/VoiceEnabledExpenseManager',
+      },
+    ],
+    status: 'library',
+    underReview: false,
+  },
+  {
+    id: 'crisismind',
+    title: 'CrisisMind',
+    direction: 'Crisis intelligence',
+    summary:
+      'A project named CrisisMind. The repository is available on GitHub. A fuller description can be added from the repository README.',
+    stack: [],
+    problem: [],
+    users: '',
+    solution: [],
+    myContribution: [],
+    stackDetailed: [],
+    architecture: [],
+    challenges: [],
+    outcomes: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/CrisisMind',
+      },
+    ],
+    status: 'library',
+    underReview: false,
+  },
+  {
+    id: 'scoutiq',
+    title: 'ScoutIQ',
+    direction: 'Scouting / talent intelligence',
+    summary:
+      'A project named ScoutIQ. The repository is available on GitHub. A fuller description can be added from the repository README.',
+    stack: [],
+    problem: [],
+    users: '',
+    solution: [],
+    myContribution: [],
+    stackDetailed: [],
+    architecture: [],
+    challenges: [],
+    outcomes: [],
+    links: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/sathvikagudise/ScoutIQ',
+      },
+    ],
+    status: 'library',
+    underReview: false,
   },
 ]
 

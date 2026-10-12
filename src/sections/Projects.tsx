@@ -67,7 +67,7 @@ export function Projects() {
       index="02"
       kicker="Projects"
       title="Work, told properly."
-      lede="Projects, described honestly. Search below by name, direction, summary, or stack — items still being verified are labelled."
+      lede="Projects, described honestly. Search below by name, direction, summary, or stack."
     >
       {showingNotFound ? (
         <div className="projects__case-study">

@@ -298,6 +298,12 @@
   color: #9fe4ff;
 }
 
+.project-card__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .project-card__no-links {
   font-family: var(--font-mono);
   font-size: 0.62rem;
