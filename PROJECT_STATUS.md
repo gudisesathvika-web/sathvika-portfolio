@@ -595,3 +595,15 @@ Admin console locally: run the backend + `npm run dev`, then open `http://127.0.
 - **Navigation/cards**: Nav includes About/Projects/Experience/Skills/Achievements/Contact. Hero has Projects button (#projects) and ResumeAction. No explicit "four cards" (Projects/Resume/Experience/Achievements) as separate card grid in Hero — existing structure uses sections + nav; existing cards present as ProjectCard components in Projects. Links point to hash routes (#projects/#experience/#achievements etc). All local data; no API dependency for display.
 - **Verification**: npm run lint clean; npx tsc -b clean; npm run build clean. Backend 39 passed, 1 warning. Automated build checks only; no browser automation performed.
 - **Findings**: No broken links observed in code. Email/LinkedIn/GitHub not populated in content.ts (intentional per policy - only verified real links; none specified as verified). No changes made (existing implementation consistent). 
+
+## Phase 27 — Final Portfolio Audit
+
+- **Branch/commit**: master @ 981bd2b (note: Phase 26 commit d068c60 not present in recent log). Working tree clean.
+- **Projects decoupling**: src/sections/Projects.tsx currently imports and uses usePublishedProjects() hook (API-based). Earlier Phase 26 attempted decoupling, but commit d068c60 not found locally. Public Projects page still depends on API hook in current codebase.
+- **Assets**: portrait sathvika-sketch.png and Sathvika@professional_portrait.png present in public/portrait and included in dist/portrait. resume sathvika-gudise-resume.pdf and Sathvika@AIML.pdf present in public/resume and included in dist/resume.
+- **Resume**: canonical path resume/sathvika-gudise-resume.pdf used by ResumeAction; preview/download targets actual PDF. HEAD probe via useAssetStatus confirms availability.
+- **Content/links**: contact.email empty, contact.links empty (honest). Achievements has verified YouTube link for Comerica challenge; patent marked underReview true. No invented URLs/metrics.
+- **Nav/routes**: hash navigation works; sections present. Homepage cards point via nav/links (#projects etc). Case-study routing via #cases/<id>.
+- **Automated checks**: frontend lint clean, tsc clean, build clean. Backend tests 39 passed, 1 warning. No browser automation performed.
+- **Deployment**: free-tier targets documented (Vercel/Render/Postgres) with env guidance, CORS/cookies, contact mock default, no secrets committed. Deployment not executed.
+- **Findings**: Projects API dependency exists (Phase 26 not reflected locally). Recommend completing local-data refactor for Projects (low-risk, preserves search/case studies) or document API requirement. No low-risk cosmetic fixes necessary; timebox limited to audit.
