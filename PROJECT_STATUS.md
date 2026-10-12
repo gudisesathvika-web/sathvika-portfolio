@@ -925,3 +925,16 @@ Committed locally. **Not pushed** (per local-only instruction).
 - No case study or other page changes. All 13 projects, badges, search, routing preserved.
 - Checks: tsc/lint/build clean.
 - Commit: (pending after verification) — will commit locally only after inspection.
+
+## Phase 38
+- Projects: removed search/filter UI and related logic; all 13 shown. Count updated.
+- Cards: grid preserves 3/2/1 columns; use flex column with actions bottom-aligned via margin-top:auto. GitHub and Case Study aligned consistently.
+- Preserved all projects, Verified badges, exact repo URLs, case-study routing, dark style/cyan accent.
+- Checks: tsc/lint/build clean. 0 api/v1/projects references.
+- Commit: 4d8ec20 (local). Not pushed/deployed.
+
+## Phase 39
+- Compact cards: reduced padding/min-height, tighter spacing and typography. Grid remains 3/2/1. Actions bottom-aligned, wrap naturally.
+- Horizontal space used more efficiently; no fixed clipping, descriptions wrap naturally. All 13 projects preserved.
+- Checks: tsc/lint/build clean. 0 api/v1/projects.
+- Commit: fa23bf9 (local). Not pushed/deployed.
