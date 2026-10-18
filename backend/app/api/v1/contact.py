@@ -1,5 +1,9 @@
 """Contact endpoint: validate, rate-limit, and deliver via configured email provider."""
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+
+logger = logging.getLogger(__name__)
 
 from app.api.deps import get_db  # noqa: F401 (not needed for contact, but keep consistent)
 from app.config import get_settings
@@ -38,6 +42,7 @@ def send_contact(payload: ContactRequest, request: Request) -> dict[str, str]:
         )
 
     provider = get_email_provider()
+    logger.info("contact request using provider: %s", type(provider).__name__)
     try:
         provider.send_contact(
             sender_name=payload.name,
@@ -46,16 +51,19 @@ def send_contact(payload: ContactRequest, request: Request) -> dict[str, str]:
             message=payload.message,
         )
     except EmailProviderError as e:
+        logger.warning("contact delivery failed via %s", type(provider).__name__)
         # Provider failed or not configured; return safe error (no body logged)
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail=e.detail,
         )
     except Exception:
+        logger.warning("contact delivery failed via %s", type(provider).__name__)
         # Unexpected error; do not leak details
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="Email delivery failed.",
         )
 
+    logger.info("contact delivery accepted via %s", type(provider).__name__)
     return {"status": "accepted"}

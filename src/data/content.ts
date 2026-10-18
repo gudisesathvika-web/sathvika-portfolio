@@ -76,8 +76,8 @@ export const about = {
   paragraphs: [
     'I am an AI engineering student who likes building things that actually work. I care less about impressive-sounding systems and more about the moment an idea becomes something people can use.',
     'My work spans AI engineering, software development, automation, and full-stack engineering. I learn by shipping: taking a messy problem apart, choosing the simplest architecture that solves it, and refining until the result feels considered.',
-    'Two projects I built, AccessGuard and SkillForge, sit at the center of what I want to be known for: one for making the web more usable, the other for making learning more personal. I describe both honestly — what they do, what I built, and what still needs verification.',
-    'This site is the home for that work, with case studies written to be useful to both recruiters and engineering reviewers. If a detail here is from public material rather than from you directly, it is marked as under review so you can keep the record accurate as it changes.',
+    'Two projects I built, AccessGuard and SkillForge, sit at the center of what I want to be known for: one for making the web more usable, the other for making learning more personal. I describe both honestly — what they do and what I built.',
+    'This site is the home for that work, with case studies written to be useful to both recruiters and engineering reviewers.',
   ],
   facts: [
     { label: 'Focus', value: 'Applied AI & intelligent systems' },
@@ -85,21 +85,6 @@ export const about = {
     { label: 'Approach', value: 'Independent thinking, working prototypes' },
     { label: 'Status', value: 'Studying · open to opportunities' },
   ],
-  /**
-   * Factual-accuracy note shown on the About page.
-   * Recruiter-friendly: tells a careful reader which signals are from you
-   * directly vs from public material, so nothing is accidentally overstated.
-   */
-  factualNote: {
-    intro:
-      'A note on how this site gets its facts, for anyone reading carefully:',
-    items: [
-      'Details that come from you directly — your role, education, projects, dates, links, and outcomes — are the authoritative version. Update them here when they change.',
-      'Some signals on this page are supported by public material rather than confirmed directly with you. Those are marked “under review” so they can be checked and corrected.',
-      'No metrics, dates, deployment status, or outcomes are included unless they are verified. Nothing here pretends a project is live when it is not.',
-      'External links appear only when they are real. Until they are, the project cards show what the project is and what your contribution was, without a link that might go nowhere.',
-    ],
-  },
 } as const
 
 /* --- Project schema ---------------------------------------------------- */
@@ -139,6 +124,8 @@ export interface Project {
   outcomes: string[]
   /** Where to read code, try a demo, or read docs — only when verified. */
   links: { label: string; url: string }[]
+  /** Optional local preview image path. */
+  image?: string
   /** Status drives how the card and case study are labelled. */
   status: ProjectStatus
   /** If true, mark with an explicit “under review” note in the UI. */
@@ -148,6 +135,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 'skillforge',
+    image: '/images/projects/skillforge.png',
     title: 'SkillForge',
     direction: 'AI-powered learning platform',
     summary:
@@ -195,6 +183,7 @@ export const projects: Project[] = [
   },
   {
     id: 'accessguard',
+    image: '/images/projects/accessguard.png',
     title: 'AccessGuard',
     direction: 'Web accessibility auditing',
     summary:
@@ -242,6 +231,7 @@ export const projects: Project[] = [
   },
   {
     id: 'neuraheal',
+    image: '/images/projects/neuraheal.png',
     title: 'NeuraHeal',
     direction: 'Server monitoring and anomaly detection',
     summary:
@@ -281,6 +271,7 @@ export const projects: Project[] = [
   },
   {
     id: 'ai-codereview',
+    image: '/images/projects/ai-codereview.png',
     title: 'AI Code Review Assistant',
     direction: 'AI-assisted code review',
     summary:
@@ -328,6 +319,7 @@ export const projects: Project[] = [
 export const projectLibrary: Project[] = [
   {
     id: 'collabgraph',
+    image: '/images/projects/collabgraph.png',
     title: 'CollabGraph',
     direction: 'Research collaboration network analysis',
     summary:
@@ -354,6 +346,7 @@ export const projectLibrary: Project[] = [
   },
   {
     id: 'smartid',
+    image: '/images/projects/smartid.png',
     title: 'Smart ID Verification & Forgery Detection System',
     direction: 'ID verification and forgery detection',
     summary:
@@ -384,6 +377,7 @@ export const projectLibrary: Project[] = [
   },
   {
     id: 'aquaml',
+    image: '/images/projects/aquaml.png',
     title: 'AquaML',
     direction: 'Aquaculture monitoring and prediction',
     summary:
@@ -414,6 +408,7 @@ export const projectLibrary: Project[] = [
   },
   {
     id: 'croplens',
+    image: '/images/projects/croplens.png',
     title: 'CropLens',
     direction: 'Crop / agriculture monitoring (related project)',
     summary:
@@ -444,6 +439,7 @@ export const projectLibrary: Project[] = [
   },
   {
     id: 'email-automator',
+    image: '/images/projects/email-automator.png',
     title: 'Email Automator',
     direction: 'Email automation tooling',
     summary:
@@ -466,6 +462,7 @@ export const projectLibrary: Project[] = [
   },
   {
     id: 'cardiorisk',
+    image: '/images/projects/cardiorisk.png',
     title: 'CardioRisk-AI',
     direction: 'Clinical heart-disease risk prediction',
     summary:
@@ -488,6 +485,7 @@ export const projectLibrary: Project[] = [
   },
   {
     id: 'voice-expense',
+    image: '/images/projects/voice-expense.png',
     title: 'Voice Enabled Expense Manager',
     direction: 'Voice-driven expense tracking',
     summary:
@@ -511,6 +509,7 @@ export const projectLibrary: Project[] = [
   },
   {
     id: 'crisismind',
+    image: '/images/projects/crisismind.png',
     title: 'CrisisMind',
     direction: 'Multimodal disaster damage assessment',
     summary:
@@ -533,6 +532,7 @@ export const projectLibrary: Project[] = [
   },
   {
     id: 'scoutiq',
+    image: '/images/projects/scoutiq.png',
     title: 'ScoutIQ',
     direction: 'Company intelligence and lead discovery',
     summary:
@@ -755,10 +755,11 @@ export const achievements: AchievementEntry[] = [
  * Until then, the section stays honest about what is configured.
  */
 export const contact = {
-  email: '', // e.g. 'you@example.com' — do not set until it is real
-  links: [] as { label: string; url: string }[], // real, owned channels only
-  note:
-    'Phase 2 still ships without a backend, so there is no contact form here — nothing on this page pretends to send email. Reach out via the channels once they are configured, or download the resume above.',
+  email: 'sathvikayadav3@gmail.com',
+  links: [
+    { label: 'GitHub', url: 'https://github.com/sathvikagudise' },
+  ],
+  note: '',
 } as const
 
 export const footer = {

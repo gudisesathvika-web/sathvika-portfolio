@@ -47,19 +47,19 @@ def login(
             detail="Too many login attempts. Try again later.",
         )
 
-    email = payload.email.lower().strip()
-    owner = db.scalar(select(Owner).where(Owner.email == email))
+    # Password-only login for the single configured portfolio owner.
+    owner = db.scalar(select(Owner))
 
     if owner is None:
         # Same hashing cost as a real account lookup: generic 401.
         verify_password(payload.password, _DUMMY_HASH)
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password"
         )
 
     if not verify_password(payload.password, owner.password_hash):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password"
         )
 
     session_token = create_session_token()

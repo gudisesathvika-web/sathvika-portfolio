@@ -1,8 +1,14 @@
-import { about } from '../data/content'
+import { about as staticAbout } from '../data/content'
+import { usePublishedAbout } from '../hooks/usePublishedAbout'
 import { SectionShell } from '../components/SectionShell'
 import { Reveal } from '../components/Reveal'
 
 export function About() {
+  const { about: published, loading, error, retry } = usePublishedAbout()
+  const about = published
+    ? { title: published.title, paragraphs: published.paragraphs, facts: published.facts }
+    : staticAbout
+
   return (
     <SectionShell
       id="about"
@@ -11,6 +17,15 @@ export function About() {
       title={about.title}
       lede="Curiosity first, ambition close behind — and technology that has to earn its place." aria-describedby="about-lede"
     >
+      {loading && <p className="about__loading">Loading About content…</p>}
+      {error && (
+        <p className="about__error">
+          {error}{' '}
+          <button type="button" onClick={retry}>
+            Retry
+          </button>
+        </p>
+      )}
       <div className="about__grid">
         <div className="about__prose">
           {about.paragraphs.map((paragraph, index) => (
@@ -18,17 +33,6 @@ export function About() {
               <p>{paragraph}</p>
             </Reveal>
           ))}
-
-          <Reveal delay={180} className="about__note">
-            <h3 className="about__note-title" id="about-lede">
-              {about.factualNote.intro}
-            </h3>
-            <ul className="about__note-list">
-              {about.factualNote.items.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </Reveal>
         </div>
 
         <Reveal delay={140} className="about__facts">

@@ -13,8 +13,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(148, 166, 199, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 166, 199, 0.05) 1px, transparent 1px);
+    linear-gradient(var(--hairline) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hairline) 1px, transparent 1px);
   background-size: 68px 68px;
   mask-image: radial-gradient(120% 90% at 50% 40%, #000 35%, transparent 80%);
   -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, #000 35%, transparent 80%);
@@ -61,7 +61,7 @@
 
 .hero__headline-em {
   font-style: italic;
-  background: linear-gradient(100deg, #9fe4ff 0%, #6ea8ff 55%, #8f8cff 100%);
+  background: linear-gradient(100deg, var(--accent-hover) 0%, #6ea8ff 55%, #8f8cff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

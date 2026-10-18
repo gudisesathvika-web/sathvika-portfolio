@@ -5,7 +5,7 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 import { usePathname } from '../router'
 import { Link } from './RouterLink'
 import { ResumeAction } from './ResumeAction'
-import { CloseIcon, MenuIcon } from './icons'
+import { CloseIcon, MenuIcon, MoonIcon, SunIcon } from './icons'
 import './topbar.css'
 
 /** Route-aware primary navigation. */
@@ -30,10 +30,25 @@ const sectionIds = navLinks
  */
 export function TopBar() {
   const [open, setOpen] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window === 'undefined') return 'dark'
+    const stored = window.localStorage.getItem('theme')
+    if (stored === 'light' || stored === 'dark') return stored
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  })
   const isCompact = useMediaQuery('(max-width: 860px)')
   const activeSection = useActiveSection(sectionIds)
   const path = usePathname()
   const toggleRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try {
+      window.localStorage.setItem('theme', theme)
+    } catch {
+      // ignore
+    }
+  }, [theme])
 
   useEffect(() => {
     if (!isCompact) setOpen(false)
@@ -94,6 +109,15 @@ export function TopBar() {
         </nav>
 
         <div className="topbar__actions">
+          <button
+            type="button"
+            className="topbar__theme"
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            aria-pressed={theme === 'dark'}
+            onClick={() => setTheme((value) => (value === 'dark' ? 'light' : 'dark'))}
+          >
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+          </button>
           <ResumeAction variant="ghost" compact className="topbar__resume" />
           <button
             ref={toggleRef}

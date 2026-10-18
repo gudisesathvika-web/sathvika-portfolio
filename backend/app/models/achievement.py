@@ -1,0 +1,38 @@
+"""Achievement content model.
+
+Stores verified achievements, awards, patents, publications, and certifications
+as editable records with publication state.
+"""
+
+from datetime import datetime
+
+from sqlalchemy import Boolean, DateTime, Integer, String, Text, func
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.types import JSON
+
+from ..database import Base
+
+
+class Achievement(Base):
+    __tablename__ = "achievements"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    category: Mapped[str] = mapped_column(String(100), nullable=False, default="Achievement", server_default="Achievement")
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    detail: Mapped[str] = mapped_column(Text, nullable=False, default="", server_default="")
+    achieved_on: Mapped[str] = mapped_column(String(100), nullable=False, default="", server_default="")
+    link_label: Mapped[str] = mapped_column(String(100), nullable=False, default="", server_default="")
+    link_url: Mapped[str] = mapped_column(String(500), nullable=False, default="", server_default="")
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    is_published: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, index=True)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )

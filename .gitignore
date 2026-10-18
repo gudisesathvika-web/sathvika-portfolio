@@ -47,3 +47,6 @@ __pycache__/
 htmlcov/
 .coverage
 *.sqlite3
+
+# Local generated preview assets (not for commit)
+preview_projects/

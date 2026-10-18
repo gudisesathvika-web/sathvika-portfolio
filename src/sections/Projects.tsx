@@ -4,13 +4,11 @@ import type { PublicProject } from '../data/publicProjects'
 import { SectionShell } from '../components/SectionShell'
 import { ProjectCard } from '../components/ProjectCard'
 import { ProjectModal } from '../components/ProjectModal'
-import { ProjectCaseStudy } from '../components/ProjectCaseStudy'
 import { useCaseStudyRoute } from '../hooks/useCaseStudyRoute'
+import { ProjectCaseStudy } from '../components/ProjectCaseStudy'
 
 export function Projects() {
   const caseStudyId = useCaseStudyRoute()
-  const [selectedProject, setSelectedProject] = useState<PublicProject | null>(null)
-  const triggerRef = useRef<HTMLElement | null>(null)
 
   const currentCaseStudy = useMemo(
     () => publicProjects.find((p) => p.id === caseStudyId) ?? null,
@@ -19,7 +17,9 @@ export function Projects() {
   const showingCaseStudy = caseStudyId !== null
   const showingNotFound = showingCaseStudy && currentCaseStudy === null
 
-  // Focus management across library → case study → library transitions.
+  const [selectedProject, setSelectedProject] = useState<PublicProject | null>(null)
+  const triggerRef = useRef<HTMLElement | null>(null)
+
   const wasShowingCaseStudy = useRef(false)
   useEffect(() => {
     if (showingCaseStudy) {
@@ -55,11 +55,7 @@ export function Projects() {
             <a className="case-study__back" href="#projects">
               ← Projects
             </a>
-            <h1
-              className="case-study__title"
-              id="cs-cs-notfound"
-              tabIndex={-1}
-            >
+            <h1 className="case-study__title" id="cs-cs-notfound" tabIndex={-1}>
               Case study not found
             </h1>
             <p className="case-study__lede">
@@ -79,10 +75,22 @@ export function Projects() {
           </p>
           <ul id="projects__list" className="projects__grid" role="list">
             {publicProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} onOpen={(p) => { triggerRef.current = document.activeElement as HTMLElement | null; setSelectedProject(p) }} />
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+                onOpen={(p) => {
+                  triggerRef.current = document.activeElement as HTMLElement | null
+                  setSelectedProject(p)
+                }}
+              />
             ))}
           </ul>
-          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} returnFocusTo={triggerRef} />
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+            returnFocusTo={triggerRef}
+          />
         </div>
       )}
     </SectionShell>

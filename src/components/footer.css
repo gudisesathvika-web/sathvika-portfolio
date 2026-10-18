@@ -1,6 +1,6 @@
 .footer {
   border-top: 1px solid var(--hairline);
-  background: rgba(6, 8, 15, 0.65);
+  background: var(--surface);
   padding-block: clamp(2.5rem, 5vw, 3.5rem);
 }
 
@@ -24,7 +24,7 @@
   max-width: 26rem;
   font-size: 0.9rem;
   line-height: 1.7;
-  color: var(--text-3);
+  color: var(--text-2);
 }
 
 .footer__nav ul {
@@ -38,7 +38,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--text-2);
   transition: color var(--dur) var(--ease-out);
 }
 
@@ -55,7 +55,13 @@
 }
 
 .footer__meta .mono {
-  color: var(--text-3);
+  color: var(--text-2);
+}
+
+.footer__nav a:focus-visible,
+.footer__top:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .footer__top {
@@ -68,7 +74,7 @@
 }
 
 .footer__top:hover {
-  color: #9fe4ff;
+  color: var(--accent-hover);
 }
 
 @media (max-width: 780px) {

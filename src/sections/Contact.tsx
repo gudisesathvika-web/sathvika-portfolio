@@ -19,7 +19,7 @@ const EMPTY_FORM: ContactFormState = {
   message: '',
 }
 
-const DELIVERY_CONFIGURED = false
+const API_BASE = ((import.meta.env.VITE_API_URL as string | undefined) ?? '').replace(/\/$/, '')
 
 /**
  * Contact section: two-column layout with professional links and an accessible
@@ -31,7 +31,8 @@ export function Contact() {
 
   const [form, setForm] = useState<ContactFormState>(EMPTY_FORM)
   const [touched, setTouched] = useState<Partial<Record<keyof ContactFormState, boolean>>>({})
-  const [status, setStatus] = useState<'idle' | 'submitting'>('idle')
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [feedback, setFeedback] = useState('')
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
@@ -53,11 +54,44 @@ export function Contact() {
   const markTouched = (field: keyof ContactFormState) =>
     setTouched((previous) => ({ ...previous, [field]: true }))
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setTouched({ name: true, email: true, subject: true, message: true })
-    if (!canSubmit || !DELIVERY_CONFIGURED) return
+    if (!canSubmit || status === 'submitting') return
+
     setStatus('submitting')
+    setFeedback('')
+    try {
+      const response = await fetch(`${API_BASE}/api/v1/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          subject: form.subject.trim(),
+          message: form.message.trim(),
+        }),
+      })
+      if (response.ok) {
+        setStatus('success')
+        setFeedback('Message sent. I will get back to you soon.')
+        setForm(EMPTY_FORM)
+        setTouched({})
+      } else {
+        let message = 'Could not send message. Please try again later.'
+        try {
+          const data = await response.json()
+          if (typeof data?.detail === 'string') message = data.detail
+        } catch {
+          // ignore
+        }
+        setStatus('error')
+        setFeedback(message)
+      }
+    } catch {
+      setStatus('error')
+      setFeedback('Could not reach the portfolio API. Check that the backend is running.')
+    }
   }
 
   return (
@@ -93,10 +127,6 @@ export function Contact() {
                 </li>
               ))}
             </ul>
-          )}
-
-          {!hasEmail && links.length === 0 && (
-            <p className="contact__pending">Contact details will be added soon.</p>
           )}
 
           <ResumeAction variant="ghost" />
@@ -192,17 +222,23 @@ export function Contact() {
               <button
                 type="submit"
                 className="btn btn--primary"
-                disabled={!canSubmit || !DELIVERY_CONFIGURED || status === 'submitting'}
+                disabled={!canSubmit || status === 'submitting'}
                 aria-busy={status === 'submitting'}
               >
                 {status === 'submitting' ? 'Sending…' : 'Send message'}
               </button>
             </div>
 
-            <p className="contact__delivery-note" role="status">
-              The contact form is temporarily unavailable. Please use the available
-              contact links to reach me directly.
-            </p>
+            {status === 'error' && feedback && (
+              <p className="contact__form-feedback contact__form-feedback--error" role="alert">
+                {feedback}
+              </p>
+            )}
+            {status === 'success' && feedback && (
+              <p className="contact__form-feedback contact__form-feedback--success" role="status" aria-live="polite">
+                {feedback}
+              </p>
+            )}
           </form>
         </Reveal>
       </div>

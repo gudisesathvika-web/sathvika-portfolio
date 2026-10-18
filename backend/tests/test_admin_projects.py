@@ -19,8 +19,8 @@ def _create_owner(session_factory, email=OWNER_EMAIL, password=OWNER_PASSWORD):
         db.commit()
 
 
-def _login(client, email=OWNER_EMAIL, password=OWNER_PASSWORD):
-    return client.post("/api/v1/auth/login", json={"email": email, "password": password})
+def _login(client, password=OWNER_PASSWORD):
+    return client.post("/api/v1/auth/login", json={"password": password})
 
 
 def _csrf(client):

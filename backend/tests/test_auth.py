@@ -21,10 +21,10 @@ def _create_owner(session_factory, email=OWNER_EMAIL, password=OWNER_PASSWORD):
         db.commit()
 
 
-def _login(client, email=OWNER_EMAIL, password=OWNER_PASSWORD):
+def _login(client, password=OWNER_PASSWORD):
     return client.post(
         "/api/v1/auth/login",
-        json={"email": email, "password": password},
+        json={"password": password},
     )
 
 
@@ -37,22 +37,16 @@ def test_me_unauthenticated_returns_401(client):
     assert response.status_code == 401
 
 
-def test_login_invalid_email_and_wrong_password_are_identical(
-    client, session_factory
-):
+def test_login_wrong_password_rejected(client, session_factory):
     _create_owner(session_factory)
-    bad_email = client.post(
-        "/api/v1/auth/login",
-        json={"email": "nobody@example.com", "password": "whatever-password"},
-    )
-    bad_password = _login(client, password="wrong-password")
+    response = _login(client, password="wrong-password")
+    assert response.status_code == 401
+    assert response.json()["error"]["message"] == "Invalid password"
 
-    assert bad_email.status_code == 401
-    assert bad_password.status_code == 401
-    assert bad_email.json()["error"]["code"] == bad_password.json()["error"]["code"]
-    assert (
-        bad_email.json()["error"]["message"] == bad_password.json()["error"]["message"]
-    )
+def test_login_empty_password_rejected(client, session_factory):
+    _create_owner(session_factory)
+    response = client.post("/api/v1/auth/login", json={"password": ""})
+    assert response.status_code == 422
 
 
 def test_login_valid_sets_cookie_and_me_works(client, session_factory):

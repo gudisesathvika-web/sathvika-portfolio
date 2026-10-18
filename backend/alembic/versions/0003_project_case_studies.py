@@ -20,13 +20,17 @@ down_revision: str | None = "0002_owners_sessions"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
-em_json = postgresql.JSONB(astext_type=sa.Text())
+def _json_type():
+    bind = op.get_bind()
+    if bind.dialect.name == "mysql":
+        return sa.JSON()
+    return postgresql.JSONB(astext_type=sa.Text())
 
 
 def _add_json_section(name: str) -> None:
     op.add_column(
         "projects",
-        sa.Column(name, em_json, nullable=False, server_default="[]"),
+        sa.Column(name, _json_type(), nullable=False, server_default="[]"),
     )
 
 

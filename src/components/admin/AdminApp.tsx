@@ -64,8 +64,8 @@ const EMPTY_FORM: FormState = {
 export function AdminApp() {
   const [status, setStatus] = useState<'loading' | 'authenticated' | 'anonymous'>('loading')
   const [email, setEmail] = useState('')
-  const [emailInput, setEmailInput] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -82,6 +82,53 @@ export function AdminApp() {
 
   const [preview, setPreview] = useState<Project | null>(null)
   const [previewLoading, setPreviewLoading] = useState(false)
+
+  const [aboutLoading, setAboutLoading] = useState(false)
+  const [aboutError, setAboutError] = useState('')
+  const [aboutNotice, setAboutNotice] = useState('')
+  const [aboutForm, setAboutForm] = useState({
+    title: '',
+    paragraphs: '',
+    facts: [{ label: '', value: '' }],
+    is_published: false,
+  })
+
+  interface AchievementItem {
+    id: string
+    category: string
+    title: string
+    detail: string
+    achieved_on: string
+    link_label: string
+    link_url: string
+    display_order: number
+    is_published: boolean
+  }
+  const [achievements, setAchievements] = useState<AchievementItem[]>([])
+  const [achievementsLoading, setAchievementsLoading] = useState(false)
+  const [achievementsError, setAchievementsError] = useState('')
+  const [achievementForm, setAchievementForm] = useState<{
+    id: string
+    category: string
+    title: string
+    detail: string
+    achieved_on: string
+    link_label: string
+    link_url: string
+    display_order: number
+    is_published: boolean
+  }>({
+    id: '',
+    category: 'Achievement',
+    title: '',
+    detail: '',
+    achieved_on: '',
+    link_label: '',
+    link_url: '',
+    display_order: 0,
+    is_published: false,
+  })
+  const [editingAchievementId, setEditingAchievementId] = useState<string | null>(null)
 
   const checkSession = useCallback(async () => {
     setStatus('loading')
@@ -122,11 +169,170 @@ export function AdminApp() {
     void checkSession()
   }, [checkSession])
 
+  const loadAbout = useCallback(async () => {
+    setAboutLoading(true)
+    setAboutError('')
+    try {
+      const response = await fetch(`${API_BASE}/api/v1/admin/about`, { credentials: 'include' })
+      if (response.ok) {
+        const data = (await response.json()) as {
+          title: string
+          paragraphs: string[]
+          facts: { label: string; value: string }[]
+          is_published: boolean
+        }
+        setAboutForm({
+          title: data.title,
+          paragraphs: data.paragraphs.join('\\n'),
+          facts: data.facts.length ? data.facts : [{ label: '', value: '' }],
+          is_published: data.is_published,
+        })
+      } else if (response.status === 404) {
+        setAboutForm({ title: '', paragraphs: '', facts: [{ label: '', value: '' }], is_published: false })
+      } else {
+        setAboutError('Could not load About content.')
+      }
+    } catch {
+      setAboutError('Could not load About content — is the backend running?')
+    } finally {
+      setAboutLoading(false)
+    }
+  }, [])
+
+  const saveAbout = async () => {
+    setAboutError('')
+    setAboutNotice('')
+    const facts = aboutForm.facts
+      .map((fact) => ({ label: fact.label.trim(), value: fact.value.trim() }))
+      .filter((fact) => fact.label || fact.value)
+    try {
+      const response = await fetch(`${API_BASE}/api/v1/admin/about`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': readCookie(CSRF_COOKIE) ?? '',
+        },
+        body: JSON.stringify({
+          title: aboutForm.title.trim(),
+          paragraphs: aboutForm.paragraphs.split('\\n').map((item) => item.trim()).filter(Boolean),
+          facts,
+          is_published: aboutForm.is_published,
+        }),
+      })
+      if (response.ok) {
+        setAboutNotice('About content saved.')
+        await loadAbout()
+      } else {
+        const body = (await response.json().catch(() => null)) as { error?: { message?: string } } | null
+        setAboutError(body?.error?.message ?? `Save failed (HTTP ${response.status}).`)
+      }
+    } catch {
+      setAboutError('Save failed — is the backend running?')
+    }
+  }
+
+  const loadAchievements = useCallback(async () => {
+    setAchievementsLoading(true)
+    setAchievementsError('')
+    try {
+      const response = await fetch(`${API_BASE}/api/v1/admin/achievements`, { credentials: 'include' })
+      if (response.ok) {
+        setAchievements((await response.json()) as AchievementItem[])
+      } else {
+        setAchievementsError('Could not load achievements.')
+      }
+    } catch {
+      setAchievementsError('Could not load achievements — is the backend running?')
+    } finally {
+      setAchievementsLoading(false)
+    }
+  }, [])
+
+  const saveAchievement = async () => {
+    setAchievementsError('')
+    const isEdit = editingAchievementId !== null
+    const payload = {
+      ...(isEdit ? {} : { id: achievementForm.id.trim() }),
+      category: achievementForm.category.trim(),
+      title: achievementForm.title.trim(),
+      detail: achievementForm.detail.trim(),
+      achieved_on: achievementForm.achieved_on.trim(),
+      link_label: achievementForm.link_label.trim(),
+      link_url: achievementForm.link_url.trim(),
+      display_order: Number(achievementForm.display_order) || 0,
+      is_published: achievementForm.is_published,
+    }
+    try {
+      const response = await fetch(
+        isEdit ? `${API_BASE}/api/v1/admin/achievements/${editingAchievementId}` : `${API_BASE}/api/v1/admin/achievements`,
+        {
+          method: isEdit ? 'PATCH' : 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': readCookie(CSRF_COOKIE) ?? '',
+          },
+          body: JSON.stringify(payload),
+        },
+      )
+      if (response.ok) {
+        setAchievementsError('')
+        setAchievementForm({ id: '', category: 'Achievement', title: '', detail: '', achieved_on: '', link_label: '', link_url: '', display_order: 0, is_published: false })
+        setEditingAchievementId(null)
+        await loadAchievements()
+      } else {
+        const body = (await response.json().catch(() => null)) as { error?: { message?: string } } | null
+        setAchievementsError(body?.error?.message ?? `Save failed (HTTP ${response.status}).`)
+      }
+    } catch {
+      setAchievementsError('Save failed — is the backend running?')
+    }
+  }
+
+  const deleteAchievement = async (id: string, title: string) => {
+    if (!window.confirm(`Delete “${title}” permanently?`)) return
+    try {
+      const response = await fetch(`${API_BASE}/api/v1/admin/achievements/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'X-CSRF-Token': readCookie(CSRF_COOKIE) ?? '' },
+      })
+      if (response.ok) await loadAchievements()
+      else {
+        const body = (await response.json().catch(() => null)) as { error?: { message?: string } } | null
+        setAchievementsError(body?.error?.message ?? `Delete failed (HTTP ${response.status}).`)
+      }
+    } catch {
+      setAchievementsError('Delete failed — is the backend running?')
+    }
+  }
+
+  const toggleAchievementPublished = async (id: string, publish: boolean) => {
+    if (!window.confirm(`${publish ? 'Publish' : 'Unpublish'} this achievement?`)) return
+    try {
+      const response = await fetch(`${API_BASE}/api/v1/admin/achievements/${id}/${publish ? 'publish' : 'unpublish'}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': readCookie(CSRF_COOKIE) ?? '' },
+      })
+      if (response.ok) await loadAchievements()
+      else {
+        const body = (await response.json().catch(() => null)) as { error?: { message?: string } } | null
+        setAchievementsError(body?.error?.message ?? `Action failed (HTTP ${response.status}).`)
+      }
+    } catch {
+      setAchievementsError('Action failed — is the backend running?')
+    }
+  }
+
   useEffect(() => {
     if (status === 'authenticated') {
       void loadProjects()
+      void loadAbout()
+      void loadAchievements()
     }
-  }, [status, loadProjects])
+  }, [status, loadProjects, loadAbout, loadAchievements])
 
   const submitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -137,7 +343,7 @@ export function AdminApp() {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: emailInput.trim(), password }),
+        body: JSON.stringify({ password }),
       })
       if (response.ok) {
         const data = (await response.json()) as { owner: { email: string } }
@@ -310,6 +516,9 @@ export function AdminApp() {
   }
 
   const setPublished = async (project: Project, publish: boolean) => {
+    if (!window.confirm(`${publish ? 'Publish' : 'Unpublish'} “${project.title}”?`)) {
+      return
+    }
     setNotice('')
     try {
       const response = await fetch(
@@ -402,8 +611,8 @@ export function AdminApp() {
 
         {status === 'anonymous' && (
           <section className="admin__card" aria-labelledby="admin-login-title">
-            <p className="kicker">Owner access</p>
-            <h1 id="admin-login-title">Sign in to the console</h1>
+            <p className="kicker">Admin Access</p>
+            <h1 id="admin-login-title">Admin Access</h1>
             <p className="admin__lede">This area is private. There is no public registration.</p>
 
             {error && (
@@ -414,20 +623,9 @@ export function AdminApp() {
 
             <form className="admin__form" onSubmit={submitLogin}>
               <label className="admin__field">
-                <span>Email</span>
-                <input
-                  type="email"
-                  name="email"
-                  autoComplete="username"
-                  required
-                  value={emailInput}
-                  onChange={(event) => setEmailInput(event.target.value)}
-                />
-              </label>
-              <label className="admin__field">
                 <span>Password</span>
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   autoComplete="current-password"
                   required
@@ -435,7 +633,14 @@ export function AdminApp() {
                   onChange={(event) => setPassword(event.target.value)}
                 />
               </label>
-              <button type="submit" className="btn btn--primary" disabled={busy}>
+              <button
+                type="button"
+                className="btn btn--ghost"
+                onClick={() => setShowPassword((value) => !value)}
+              >
+                {showPassword ? 'Hide password' : 'Show password'}
+              </button>
+              <button type="submit" className="btn btn--primary" disabled={busy || !password}>
                 {busy ? 'Signing in…' : 'Sign in'}
               </button>
             </form>
@@ -489,10 +694,16 @@ export function AdminApp() {
                           </span>
                           <strong>{project.title}</strong>
                           <span className="admin__project-id">{project.id}</span>
+                          {project.updated_at && (
+                            <span className="admin__project-updated">
+                              Updated {new Date(project.updated_at).toLocaleString()}
+                            </span>
+                          )}
                         </div>
                         <div className="admin__project-actions">
                           <button
                             type="button"
+                            disabled={saving || busy || projectsLoading}
                             onClick={() => {
                               if (project.is_published) {
                                 void setPublished(project, false)
@@ -503,15 +714,16 @@ export function AdminApp() {
                           >
                             {project.is_published ? 'Unpublish' : 'Publish'}
                           </button>
-                          <button type="button" onClick={() => openEdit(project)}>
+                          <button type="button" disabled={saving || busy || projectsLoading} onClick={() => openEdit(project)}>
                             Edit
                           </button>
-                          <button type="button" onClick={() => void openPreview(project)}>
+                          <button type="button" disabled={saving || busy || projectsLoading} onClick={() => void openPreview(project)}>
                             Preview
                           </button>
                           <button
                             type="button"
                             className="admin__danger"
+                            disabled={saving || busy || projectsLoading}
                             onClick={() => void deleteProject(project)}
                           >
                             Delete
@@ -622,6 +834,172 @@ export function AdminApp() {
                 </div>
               </div>
             </div>
+
+            <section className="admin__card admin__card--wide" aria-labelledby="admin-about-title">
+              <div className="admin__top">
+                <div>
+                  <p className="kicker">About content</p>
+                  <h2 id="admin-about-title">About</h2>
+                </div>
+              </div>
+              {aboutError && <p className="admin__error" role="alert">{aboutError}</p>}
+              {aboutNotice && <p className="admin__notice" role="status">{aboutNotice}</p>}
+              {aboutLoading ? (
+                <p className="admin__state" role="status">Loading About content…</p>
+              ) : (
+                <div className="admin__form">
+                  <label className="admin__field">
+                    <span>Title</span>
+                    <input
+                      value={aboutForm.title}
+                      onChange={(event) => setAboutForm({ ...aboutForm, title: event.target.value })}
+                    />
+                  </label>
+                  <label className="admin__field">
+                    <span>Paragraphs (one per line)</span>
+                    <textarea
+                      rows={6}
+                      value={aboutForm.paragraphs}
+                      onChange={(event) => setAboutForm({ ...aboutForm, paragraphs: event.target.value })}
+                    />
+                  </label>
+                  {aboutForm.facts.map((fact, index) => (
+                    <div className="admin__form" key={index}>
+                      <label className="admin__field">
+                        <span>Fact label</span>
+                        <input
+                          value={fact.label}
+                          onChange={(event) => {
+                            const facts = [...aboutForm.facts]
+                            facts[index] = { ...facts[index], label: event.target.value }
+                            setAboutForm({ ...aboutForm, facts })
+                          }}
+                        />
+                      </label>
+                      <label className="admin__field">
+                        <span>Fact value</span>
+                        <input
+                          value={fact.value}
+                          onChange={(event) => {
+                            const facts = [...aboutForm.facts]
+                            facts[index] = { ...facts[index], value: event.target.value }
+                            setAboutForm({ ...aboutForm, facts })
+                          }}
+                        />
+                      </label>
+                    </div>
+                  ))}
+                  <label className="admin__field">
+                    <span>
+                      <input
+                        type="checkbox"
+                        checked={aboutForm.is_published}
+                        onChange={(event) => setAboutForm({ ...aboutForm, is_published: event.target.checked })}
+                      />{' '}
+                      Published
+                    </span>
+                  </label>
+                  <button type="button" className="btn btn--primary" onClick={() => void saveAbout()}>
+                    Save About
+                  </button>
+                </div>
+              )}
+            </section>
+
+            <section className="admin__card admin__card--wide" aria-labelledby="admin-achievements-title">
+              <div className="admin__top">
+                <div>
+                  <p className="kicker">Achievements</p>
+                  <h2 id="admin-achievements-title">Achievements</h2>
+                </div>
+              </div>
+              {achievementsError && <p className="admin__error" role="alert">{achievementsError}</p>}
+              {achievementsLoading ? (
+                <p className="admin__state" role="status">Loading achievements…</p>
+              ) : (
+                <>
+                  <ul className="admin__list">
+                    {achievements.map((item) => (
+                      <li key={item.id} className="admin__project">
+                        <div className="admin__project-main">
+                          <span className={`admin__badge admin__badge--${item.is_published ? 'published' : 'draft'}`}>
+                            {item.is_published ? 'Published' : 'Draft'}
+                          </span>
+                          <strong>{item.title}</strong>
+                          <span className="admin__project-id">{item.id}</span>
+                        </div>
+                        <div className="admin__project-actions">
+                          <button type="button" disabled={achievementsLoading} onClick={() => void toggleAchievementPublished(item.id, !item.is_published)}>
+                            {item.is_published ? 'Unpublish' : 'Publish'}
+                          </button>
+                          <button type="button" disabled={achievementsLoading} onClick={() => {
+                            setEditingAchievementId(item.id)
+                            setAchievementForm({
+                              id: item.id,
+                              category: item.category,
+                              title: item.title,
+                              detail: item.detail,
+                              achieved_on: item.achieved_on,
+                              link_label: item.link_label,
+                              link_url: item.link_url,
+                              display_order: item.display_order,
+                              is_published: item.is_published,
+                            })
+                          }}>
+                            Edit
+                          </button>
+                          <button type="button" className="admin__danger" disabled={achievementsLoading} onClick={() => void deleteAchievement(item.id, item.title)}>
+                            Delete
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="admin__form">
+                    <label className="admin__field">
+                      <span>Slug / id</span>
+                      <input value={achievementForm.id} disabled={editingAchievementId !== null} onChange={(e) => setAchievementForm({ ...achievementForm, id: e.target.value })} />
+                    </label>
+                    <label className="admin__field">
+                      <span>Category</span>
+                      <input value={achievementForm.category} onChange={(e) => setAchievementForm({ ...achievementForm, category: e.target.value })} />
+                    </label>
+                    <label className="admin__field">
+                      <span>Title</span>
+                      <input value={achievementForm.title} onChange={(e) => setAchievementForm({ ...achievementForm, title: e.target.value })} />
+                    </label>
+                    <label className="admin__field">
+                      <span>Detail</span>
+                      <textarea value={achievementForm.detail} onChange={(e) => setAchievementForm({ ...achievementForm, detail: e.target.value })} />
+                    </label>
+                    <label className="admin__field">
+                      <span>Date</span>
+                      <input value={achievementForm.achieved_on} onChange={(e) => setAchievementForm({ ...achievementForm, achieved_on: e.target.value })} />
+                    </label>
+                    <label className="admin__field">
+                      <span>Link label</span>
+                      <input value={achievementForm.link_label} onChange={(e) => setAchievementForm({ ...achievementForm, link_label: e.target.value })} />
+                    </label>
+                    <label className="admin__field">
+                      <span>Link URL</span>
+                      <input value={achievementForm.link_url} onChange={(e) => setAchievementForm({ ...achievementForm, link_url: e.target.value })} />
+                    </label>
+                    <label className="admin__field">
+                      <span>Display order</span>
+                      <input type="number" value={achievementForm.display_order} onChange={(e) => setAchievementForm({ ...achievementForm, display_order: Number(e.target.value) })} />
+                    </label>
+                    <label className="admin__field">
+                      <span>
+                        <input type="checkbox" checked={achievementForm.is_published} onChange={(e) => setAchievementForm({ ...achievementForm, is_published: e.target.checked })} /> Published
+                      </span>
+                    </label>
+                    <button type="button" className="btn btn--primary" onClick={() => void saveAchievement()}>
+                      Save achievement
+                    </button>
+                  </div>
+                </>
+              )}
+            </section>
           </section>
         )}
       </div>

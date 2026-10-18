@@ -1,4 +1,5 @@
 import type React from 'react'
+import { useState } from 'react'
 import { type PublicProject } from '../data/publicProjects'
 import { GitHubIcon, ExternalIcon } from './icons'
 
@@ -12,6 +13,7 @@ export function ProjectCard({ project, index = 0, onOpen }: ProjectCardProps) {
   const repoLink = project.links.find((link) => /github\.com/i.test(link.url))
   const demoLink = project.links.find((link) => !/github\.com/i.test(link.url))
   const hue = (project.id.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0) * 37) % 80 + 180
+  const [imageFailed, setImageFailed] = useState(false)
 
   const open = () => onOpen?.(project)
 
@@ -31,17 +33,27 @@ export function ProjectCard({ project, index = 0, onOpen }: ProjectCardProps) {
       onClick={open}
       onKeyDown={handleKeyDown}
     >
-      <div
-        className="project-card__preview"
-        aria-hidden="true"
-        style={{
-          background: `linear-gradient(135deg, hsla(${hue}, 72%, 58%, 0.24), rgba(17, 23, 40, 0.96)), radial-gradient(600px 220px at 22% 0%, hsla(${hue + 20}, 80%, 62%, 0.22), transparent 62%)`,
-        }}
-      >
-        <span className="project-card__preview-mark">
-          {project.title.charAt(0).toUpperCase()}
-        </span>
-        <span className="project-card__preview-label">Preview placeholder</span>
+      <div className="project-card__preview" aria-hidden="true">
+        {project.image && !imageFailed ? (
+          <img
+            src={project.image}
+            alt={`${project.title} project preview`}
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          <div
+            className="project-card__preview-placeholder"
+            style={{
+              background: `linear-gradient(135deg, hsla(${hue}, 72%, 58%, 0.24), rgba(17, 23, 40, 0.96)), radial-gradient(600px 220px at 22% 0%, hsla(${hue + 20}, 80%, 62%, 0.22), transparent 62%)`,
+            }}
+          >
+            <span className="project-card__preview-mark">
+              {project.title.charAt(0).toUpperCase()}
+            </span>
+            <span className="project-card__preview-label">Preview placeholder</span>
+          </div>
+        )}
         {repoLink && (
           <a
             className="project-card__preview-action"

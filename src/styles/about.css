@@ -58,7 +58,7 @@
 .about__facts {
   border: 1px solid var(--hairline);
   border-radius: var(--radius-lg);
-  background: rgba(17, 23, 40, 0.55);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   padding: clamp(1.25rem, 2vw, 1.75rem);
 }
 

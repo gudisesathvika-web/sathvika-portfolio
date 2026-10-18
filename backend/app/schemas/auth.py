@@ -6,11 +6,11 @@ account exists.
 
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    # Password-only admin login. No email/username is accepted or required.
     # No minimum password length enforced here: a "password too short" message
     # would leak that an account exists. All failures are treated identically.
     password: str = Field(min_length=1, max_length=256)

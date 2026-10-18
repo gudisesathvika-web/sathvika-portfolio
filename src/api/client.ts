@@ -45,6 +45,32 @@ function asLinks(value: unknown): ProjectLink[] {
   )
 }
 
+export interface PublishedAchievement {
+  id: string
+  category: string
+  title: string
+  detail: string
+  achieved_on: string
+  link_label: string
+  link_url: string
+  display_order: number
+  is_published: boolean
+  updated_at: string
+}
+
+export async function fetchPublishedAchievements(): Promise<PublishedAchievement[]> {
+  try {
+    const response = await fetch(`${API_BASE}/api/v1/achievements`, {
+      headers: { Accept: 'application/json' },
+    })
+    if (!response.ok) throw new Error(`Could not load achievements (HTTP ${response.status}).`)
+    return (await response.json()) as PublishedAchievement[]
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('HTTP')) throw error
+    throw new Error('Could not reach the portfolio API. Check that the backend is running.')
+  }
+}
+
 export async function fetchPublishedProjects(): Promise<PublishedProject[]> {
   let response: Response
   try {
@@ -75,6 +101,35 @@ export async function fetchPublishedProjects(): Promise<PublishedProject[]> {
     links: asLinks(project.links),
     updated_at: project.updated_at,
   }))
+}
+
+export interface PublishedAboutFact {
+  label: string
+  value: string
+}
+
+export interface PublishedAbout {
+  title: string
+  paragraphs: string[]
+  facts: PublishedAboutFact[]
+  is_published: boolean
+  updated_at: string
+}
+
+export async function fetchPublishedAbout(): Promise<PublishedAbout | null> {
+  try {
+    const response = await fetch(`${API_BASE}/api/v1/about`, {
+      headers: { Accept: 'application/json' },
+    })
+    if (response.status === 404) return null
+    if (!response.ok) {
+      throw new Error(`Could not load About content (HTTP ${response.status}).`)
+    }
+    return (await response.json()) as PublishedAbout
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('HTTP')) throw error
+    throw new Error('Could not reach the portfolio API. Check that the backend is running.')
+  }
 }
 
 /** Same-origin relative or absolute URL for a case-study hash route. */

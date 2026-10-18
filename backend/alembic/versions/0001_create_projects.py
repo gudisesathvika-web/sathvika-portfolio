@@ -12,6 +12,13 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 
 revision: str = "0001_create_projects"
+
+
+def _json_type():
+    bind = op.get_bind()
+    if bind.dialect.name == "mysql":
+        return sa.JSON()
+    return postgresql.JSONB(astext_type=sa.Text())
 down_revision: str | None = None
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
@@ -26,7 +33,7 @@ def upgrade() -> None:
         sa.Column("summary", sa.Text(), nullable=False),
         sa.Column(
             "stack",
-            postgresql.JSONB(astext_type=sa.Text()),
+            _json_type(),
             nullable=False,
             server_default="[]",
         ),

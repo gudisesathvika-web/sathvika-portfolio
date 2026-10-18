@@ -6,13 +6,14 @@ here is logged.
 """
 
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(Path(__file__).resolve().parent.parent / ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
         case_sensitive=False,
@@ -65,6 +66,14 @@ class Settings(BaseSettings):
     contact_to_email: str = ""
     contact_to_name: str = ""
     contact_endpoint_url: str = ""  # provider-specific HTTPS endpoint if needed
+
+    # --- SMTP (Gmail STARTTLS by default) ---
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_username: str = ""
+    smtp_password: str = ""
+    smtp_tls_mode: str = "starttls"  # starttls | ssl | none
+    smtp_timeout_seconds: int = 10
 
     @property
     def cors_origin_list(self) -> list[str]:

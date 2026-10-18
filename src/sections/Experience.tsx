@@ -10,7 +10,7 @@ export function Experience() {
       index="03"
       kicker="Experience"
       title="Where the work happens."
-      lede="Education, roles, and hands-on building. Any entry whose details still need confirmation is labelled as under review."
+      lede="Education, roles, and hands-on building."
     >
       <ol className="timeline">
         {experience.map((entry, index) => (

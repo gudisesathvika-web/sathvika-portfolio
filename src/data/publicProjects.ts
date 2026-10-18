@@ -28,6 +28,8 @@ export interface PublicProject {
   challenges: string[]
   outcomes: string[]
   links: { label: string; url: string }[]
+  /** Optional local preview image path. */
+  image?: string
   /** True when details still need confirmation — shown as a visible label. */
   underReview: boolean
 }
@@ -58,6 +60,7 @@ function toPublicProject(project: Project): PublicProject {
     challenges: [...project.challenges],
     outcomes: [...project.outcomes],
     links: project.links.map((link) => ({ label: link.label, url: link.url })),
+    image: project.image,
     underReview: project.underReview,
   }
 }

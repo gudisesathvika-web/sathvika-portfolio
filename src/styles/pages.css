@@ -9,8 +9,8 @@
   padding-top: calc(var(--nav-height) + clamp(2rem, 5vw, 4.5rem));
   padding-bottom: clamp(3rem, 6vw, 6rem);
   background:
-    radial-gradient(60% 55% at 78% 18%, rgba(77, 139, 255, 0.14), transparent 70%),
-    radial-gradient(50% 50% at 12% 8%, rgba(86, 212, 255, 0.08), transparent 70%);
+    radial-gradient(60% 55% at 78% 18%, var(--accent-soft), transparent 70%),
+    radial-gradient(50% 50% at 12% 8%, var(--accent-soft), transparent 70%);
 }
 
 .home-hero__grid {
