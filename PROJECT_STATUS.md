@@ -966,3 +966,9 @@ Committed locally. **Not pushed** (per local-only instruction).
 - No genuine screenshots found locally; all previews are clearly labeled placeholders. No demo links invented.
 - Checks: tsc/lint/build clean. Browser verified 13 cards/previews, 11 distinct gradients, modal still functional.
 - Commit: (pending) local only.
+
+## Phase 45
+- Homepage hero upgraded with clear AI builder/software engineer headline, concise practical-systems intro, and View Projects + Resume actions.
+- Preserved approved portrait, navigation, routes, and existing dark navy/cyan identity.
+- Checks: tsc/lint/build clean. Browser verified production preview homepage headline/actions.
+- Commit: (pending) local only.

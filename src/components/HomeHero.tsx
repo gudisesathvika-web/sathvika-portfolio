@@ -1,9 +1,7 @@
-import { assets, site } from '../data/content'
+import { site } from '../data/content'
 import { Link } from './RouterLink'
 import { Portrait } from './Portrait'
 import { ArrowRightIcon, DownloadIcon } from './icons'
-
-const resumeUrl = `${import.meta.env.BASE_URL}${assets.resume.path}`
 
 /**
  * Homepage hero — identity, professional introduction and the approved
@@ -16,15 +14,13 @@ export function HomeHero() {
         <div className="home-hero__copy">
           <p className="home-hero__kicker mono">{site.name}</p>
           <h1 className="home-hero__title" id="home-hero-title">
-            {site.headline.line1}
-            <span className="home-hero__title-em">{site.headline.line2}</span>
+            AI builder and software engineer.
           </h1>
           <p className="home-hero__role">{site.identity}</p>
           <p className="home-hero__intro">
-            I build intelligent systems and full-stack products that turn messy
-            problems into tools people can actually use. Currently an AI
-            engineering student shipping real work — SkillForge and AccessGuard
-            among it.
+            I design and ship practical intelligent systems — from AI-powered
+            learning and accessibility platforms to full-stack products people
+            can actually use.
           </p>
 
           <div className="home-hero__actions">
@@ -32,14 +28,10 @@ export function HomeHero() {
               View projects
               <ArrowRightIcon size={15} />
             </Link>
-            <a
-              className="btn btn--ghost home-hero__cta"
-              href={resumeUrl}
-              download
-            >
+            <Link className="btn btn--ghost home-hero__cta" to="/resume">
+              Resume
               <DownloadIcon size={15} />
-              Download resume
-            </a>
+            </Link>
           </div>
 
           <dl className="home-hero__facts">
