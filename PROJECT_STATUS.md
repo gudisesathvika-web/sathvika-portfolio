@@ -959,3 +959,10 @@ Committed locally. **Not pushed** (per local-only instruction).
 - Visual polish: improved spacing/typography/hierarchy, proportional preview, mobile sizing/internal scroll, prominent GitHub action, Live Demo conditional.
 - Checks: tsc/lint/build clean. Browser verified focus enter/restore, open/close, 13 cards.
 - Commit: (pending) local only.
+
+## Phase 44
+- Project previews now use distinct CSS placeholder gradients per project; card and modal previews share the same deterministic styling.
+- Cards include project direction/category, preview, title, description, compact tags, and aligned actions.
+- No genuine screenshots found locally; all previews are clearly labeled placeholders. No demo links invented.
+- Checks: tsc/lint/build clean. Browser verified 13 cards/previews, 11 distinct gradients, modal still functional.
+- Commit: (pending) local only.

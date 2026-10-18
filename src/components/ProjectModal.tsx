@@ -73,6 +73,7 @@ export function ProjectModal({ project, onClose, returnFocusTo }: ProjectModalPr
   const repository = repoLink(project)
   const demo = demoLink(project)
   const overview = project.problem.length > 0 ? project.problem[0] : project.summary
+  const hue = (project.id.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0) * 37) % 80 + 180
   const whatBuilt = [...project.solution, ...project.my_contribution].slice(0, 4)
   const technical = [...project.stack_detail, ...project.architecture, ...project.challenges].slice(0, 4)
 
@@ -100,11 +101,17 @@ export function ProjectModal({ project, onClose, returnFocusTo }: ProjectModalPr
           <CloseIcon size={18} />
         </button>
 
-        <div className="project-modal__preview" aria-hidden="true">
+        <div
+          className="project-modal__preview"
+          aria-hidden="true"
+          style={{
+            background: `linear-gradient(135deg, hsla(${hue}, 72%, 58%, 0.24), rgba(17, 23, 40, 0.96)), radial-gradient(700px 240px at 30% 0%, hsla(${hue + 20}, 80%, 62%, 0.28), transparent 60%)`,
+          }}
+        >
           <span className="project-modal__preview-mark">
             {project.title.charAt(0).toUpperCase()}
           </span>
-          <span className="project-modal__preview-label">Project preview</span>
+          <span className="project-modal__preview-label">Preview placeholder</span>
         </div>
 
         <header className="project-modal__head">
