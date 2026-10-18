@@ -979,3 +979,8 @@ Committed locally. **Not pushed** (per local-only instruction).
 - Delivery not configured: submit remains disabled with clear note; no fake success.
 - Checks: tsc/lint/build clean. Browser verified two-column layout, 4 fields, submit disabled.
 - Commit: (pending) local only.
+
+## Phase 47
+- Final responsive/accessibility polish: fixed contact form horizontal overflow, added focus-visible styles, verified modal behavior.
+- Checks: tsc/lint/build clean. Browser verified no horizontal overflow on homepage production preview.
+- Commit: (pending) local only.

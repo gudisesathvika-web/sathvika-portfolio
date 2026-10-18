@@ -559,10 +559,26 @@
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: 1.25rem;
+  min-width: 0;
+}
+
+.contact__form {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.contact__field,
+.contact__field--full,
+.contact__form-actions,
+.contact__delivery-note {
+  min-width: 0;
 }
 
 .contact__info,
 .contact__form-wrap {
+  min-width: 0;
   padding: clamp(1.4rem, 2.5vw, 2rem);
   border: 1px solid var(--hairline);
   border-radius: var(--radius-lg);
@@ -1024,4 +1040,24 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-3);
+}
+
+/* --- Final accessibility polish --- */
+
+.project-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.contact__field input:focus-visible,
+.contact__field textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent-line);
+}
+
+a:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
