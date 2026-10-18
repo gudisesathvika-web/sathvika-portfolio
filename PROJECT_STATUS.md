@@ -990,3 +990,10 @@ Committed locally. **Not pushed** (per local-only instruction).
 - Experience restored to three verified entries: TVB, CodeAlpha, OctaNet (from resume).
 - Checks: tsc/lint/build clean. Browser verified achievements and experience pages.
 - Commit: (pending) local only.
+
+## Phase 49
+- Added GitHub Repository button inside each project preview placeholder (13 total), with safe new-tab attributes and modal-open prevention.
+- Completed case-study content for CrisisMind, Voice Enabled Expense Manager, Email Automator, CardioRisk-AI, and ScoutIQ from verified README details.
+- Removed placeholder-only content for those five projects.
+- Checks: tsc/lint/build clean. Browser verified 13 cards, 13 preview GitHub buttons, button click does not open modal.
+- Commit: (pending) local only.

@@ -42,6 +42,19 @@ export function ProjectCard({ project, index = 0, onOpen }: ProjectCardProps) {
           {project.title.charAt(0).toUpperCase()}
         </span>
         <span className="project-card__preview-label">Preview placeholder</span>
+        {repoLink && (
+          <a
+            className="project-card__preview-action"
+            href={repoLink.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open the ${project.title} GitHub repository`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <GitHubIcon size={14} />
+            GitHub Repository
+          </a>
+        )}
       </div>
 
       <header className="project-card__head">

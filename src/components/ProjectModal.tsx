@@ -112,6 +112,18 @@ export function ProjectModal({ project, onClose, returnFocusTo }: ProjectModalPr
             {project.title.charAt(0).toUpperCase()}
           </span>
           <span className="project-modal__preview-label">Preview placeholder</span>
+          {repoLink(project) && (
+            <a
+              className="project-modal__preview-action"
+              href={repoLink(project)!.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open the ${project.title} GitHub repository`}
+            >
+              <GitHubIcon size={14} />
+              GitHub Repository
+            </a>
+          )}
         </div>
 
         <header className="project-modal__head">
