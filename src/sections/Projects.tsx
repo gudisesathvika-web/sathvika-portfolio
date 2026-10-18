@@ -10,6 +10,7 @@ import { useCaseStudyRoute } from '../hooks/useCaseStudyRoute'
 export function Projects() {
   const caseStudyId = useCaseStudyRoute()
   const [selectedProject, setSelectedProject] = useState<PublicProject | null>(null)
+  const triggerRef = useRef<HTMLElement | null>(null)
 
   const currentCaseStudy = useMemo(
     () => publicProjects.find((p) => p.id === caseStudyId) ?? null,
@@ -78,10 +79,10 @@ export function Projects() {
           </p>
           <ul id="projects__list" className="projects__grid" role="list">
             {publicProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} onOpen={setSelectedProject} />
+              <ProjectCard key={project.id} project={project} index={index} onOpen={(p) => { triggerRef.current = document.activeElement as HTMLElement | null; setSelectedProject(p) }} />
             ))}
           </ul>
-          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} returnFocusTo={triggerRef} />
         </div>
       )}
     </SectionShell>

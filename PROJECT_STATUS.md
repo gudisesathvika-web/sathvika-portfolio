@@ -953,3 +953,9 @@ Committed locally. **Not pushed** (per local-only instruction).
 - Cards remain compact and clickable; 13 projects and exact repository URLs preserved.
 - Checks: tsc/lint/build clean. Browser verified: 13 cards, 3/2/1 responsive grid, modal open/close (Escape/backdrop), body scroll lock.
 - Commit: (pending) — local only, not pushed/deployed.
+
+## Phase 43
+- Project modal accessibility + visual polish: focus trap, focus on open, focus restore to triggering card, Escape/backdrop close, scroll lock/restore, dialog semantics.
+- Visual polish: improved spacing/typography/hierarchy, proportional preview, mobile sizing/internal scroll, prominent GitHub action, Live Demo conditional.
+- Checks: tsc/lint/build clean. Browser verified focus enter/restore, open/close, 13 cards.
+- Commit: (pending) local only.

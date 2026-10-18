@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
+import type React from 'react'
 import { type PublicProject } from '../data/publicProjects'
 import { CloseIcon, GitHubIcon, ExternalIcon } from './icons'
 
 interface ProjectModalProps {
   project: PublicProject | null
   onClose: () => void
+  returnFocusTo?: React.RefObject<HTMLElement | null>
 }
 
 function repoLink(project: PublicProject) {
@@ -15,27 +17,56 @@ function demoLink(project: PublicProject) {
   return project.links.find((link) => !/github\.com/i.test(link.url)) ?? null
 }
 
-export function ProjectModal({ project, onClose }: ProjectModalProps) {
+export function ProjectModal({ project, onClose, returnFocusTo }: ProjectModalProps) {
   const closeRef = useRef<HTMLButtonElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!project) return
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    closeRef.current?.focus()
+    const returnFocus = returnFocusTo?.current ?? null
+
+    const focusableSelector =
+      'a[href]:not([disabled]), button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+
+    const getFocusable = () => {
+      const panel = panelRef.current
+      if (!panel) return []
+      return Array.from(panel.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+        (element) => element.offsetParent !== null || element === document.activeElement,
+      )
+    }
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault()
         onClose()
+        return
+      }
+      if (event.key !== 'Tab') return
+      const focusable = getFocusable()
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
       }
     }
+
     window.addEventListener('keydown', onKey)
+    closeRef.current?.focus()
+
     return () => {
-      document.body.style.overflow = previousOverflow
       window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = previousOverflow
+      returnFocus?.focus()
     }
-  }, [project, onClose])
+  }, [project, onClose, returnFocusTo])
 
   if (!project) return null
 
@@ -58,7 +89,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         aria-label="Close project details"
         onClick={onClose}
       />
-      <div className="project-modal__panel">
+      <div className="project-modal__panel" ref={panelRef} tabIndex={-1}>
         <button
           ref={closeRef}
           type="button"
