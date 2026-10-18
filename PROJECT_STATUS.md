@@ -945,3 +945,11 @@ Committed locally. **Not pushed** (per local-only instruction).
 - 1024px: 2 columns (406px each).
 - 390px (mobile): 1 column (350px).
 - Source/build match compact CSS. Previous "unchanged look" consistent with stale cache/viewing different build. No CSS change made in this phase.
+
+## Phase 42
+- Project gallery upgraded to image-led cards with CSS placeholders; search/category filters remain removed.
+- Added ProjectModal with title, preview, overview, tags, technical details, GitHub Repository link (Live Demo only when real demo URL exists).
+- Modal closes via close button, Escape key, and backdrop click; background scroll locked while open.
+- Cards remain compact and clickable; 13 projects and exact repository URLs preserved.
+- Checks: tsc/lint/build clean. Browser verified: 13 cards, 3/2/1 responsive grid, modal open/close (Escape/backdrop), body scroll lock.
+- Commit: (pending) — local only, not pushed/deployed.

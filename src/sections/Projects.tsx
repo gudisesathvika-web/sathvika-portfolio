@@ -1,12 +1,15 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { publicProjects } from '../data/publicProjects'
+import type { PublicProject } from '../data/publicProjects'
 import { SectionShell } from '../components/SectionShell'
 import { ProjectCard } from '../components/ProjectCard'
+import { ProjectModal } from '../components/ProjectModal'
 import { ProjectCaseStudy } from '../components/ProjectCaseStudy'
 import { useCaseStudyRoute } from '../hooks/useCaseStudyRoute'
 
 export function Projects() {
   const caseStudyId = useCaseStudyRoute()
+  const [selectedProject, setSelectedProject] = useState<PublicProject | null>(null)
 
   const currentCaseStudy = useMemo(
     () => publicProjects.find((p) => p.id === caseStudyId) ?? null,
@@ -75,9 +78,10 @@ export function Projects() {
           </p>
           <ul id="projects__list" className="projects__grid" role="list">
             {publicProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
+              <ProjectCard key={project.id} project={project} index={index} onOpen={setSelectedProject} />
             ))}
           </ul>
+          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
         </div>
       )}
     </SectionShell>
