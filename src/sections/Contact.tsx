@@ -5,8 +5,6 @@ import { ResumeAction } from '../components/ResumeAction'
 import { Reveal } from '../components/Reveal'
 import { ArrowUpRightIcon, MailIcon } from '../components/icons'
 
-const API_BASE = ((import.meta.env.VITE_API_URL as string | undefined) ?? '').replace(/\/$/, '')
-
 interface ContactFormState {
   name: string
   email: string
@@ -21,65 +19,45 @@ const EMPTY_FORM: ContactFormState = {
   message: '',
 }
 
+const DELIVERY_CONFIGURED = false
+
 /**
- * Contact form wired to /api/v1/contact. No success is shown on backend/provider
- * failure; validation, loading state, and duplicate-submit prevention included.
+ * Contact section: two-column layout with professional links and an accessible
+ * message form. Delivery is not configured, so the form never claims success.
  */
 export function Contact() {
   const hasEmail = contact.email.trim().length > 0
   const links = contact.links.filter((link) => link.url.trim().length > 0)
 
   const [form, setForm] = useState<ContactFormState>(EMPTY_FORM)
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
-  const [error, setError] = useState('')
-  const [successMsg, setSuccessMsg] = useState('')
+  const [touched, setTouched] = useState<Partial<Record<keyof ContactFormState, boolean>>>({})
+  const [status, setStatus] = useState<'idle' | 'submitting'>('idle')
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+  const errors: Partial<Record<keyof ContactFormState, string>> = {}
+  if (touched.name && form.name.trim().length === 0) errors.name = 'Name is required.'
+  if (touched.email) {
+    if (form.email.trim().length === 0) errors.email = 'Email is required.'
+    else if (!isValidEmail(form.email.trim())) errors.email = 'Enter a valid email address.'
+  }
+  if (touched.subject && form.subject.trim().length === 0) errors.subject = 'Subject is required.'
+  if (touched.message && form.message.trim().length === 0) errors.message = 'Message is required.'
 
   const canSubmit =
     form.name.trim().length > 0 &&
     form.subject.trim().length > 0 &&
     form.message.trim().length > 0 &&
-    isValidEmail(form.email.trim()) &&
-    status !== 'submitting'
+    isValidEmail(form.email.trim())
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const markTouched = (field: keyof ContactFormState) =>
+    setTouched((previous) => ({ ...previous, [field]: true }))
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!canSubmit) return
-
+    setTouched({ name: true, email: true, subject: true, message: true })
+    if (!canSubmit || !DELIVERY_CONFIGURED) return
     setStatus('submitting')
-    setError('')
-    setSuccessMsg('')
-    try {
-      const response = await fetch(`${API_BASE}/api/v1/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          subject: form.subject.trim(),
-          message: form.message.trim(),
-        }),
-      })
-      if (response.ok) {
-        setStatus('success')
-        setSuccessMsg('Message sent. I’ll get back to you soon.')
-        setForm(EMPTY_FORM)
-      } else {
-        let message = 'Could not send message.'
-        try {
-          const data = await response.json()
-          message = data.error?.message ?? data.detail ?? message
-        } catch {
-          // ignore
-        }
-        setStatus('error')
-        setError(message)
-      }
-    } catch {
-      setStatus('error')
-      setError('Could not reach the portfolio API. Check that the backend is running.')
-    }
   }
 
   return (
@@ -91,7 +69,12 @@ export function Contact() {
       lede="If you have a hard problem worth solving, or an opportunity in AI engineering and software, I'd like to hear about it."
     >
       <div className="contact__grid">
-        <Reveal className="contact__primary">
+        <Reveal className="contact__info">
+          <p className="contact__invite">
+            Reach out for collaboration, internships, or full-time opportunities.
+            I respond to thoughtful, specific messages.
+          </p>
+
           {hasEmail ? (
             <a className="btn btn--primary contact__mail" href={`mailto:${contact.email}`}>
               <MailIcon size={15} />
@@ -101,16 +84,12 @@ export function Contact() {
             <p className="contact__pending">
               <span className="tag tag--starter">Not configured</span>
               No email address is set yet. Add <code>contact.email</code> in{' '}
-              <code>src/data/content.ts</code> and this button goes live — the
-              portfolio never shows a channel that cannot reach me.
+              <code>src/data/content.ts</code>.
             </p>
           )}
-          <ResumeAction variant="ghost" />
-        </Reveal>
 
-        <Reveal delay={100} className="contact__channels">
-          {links.length > 0 ? (
-            <ul>
+          {links.length > 0 && (
+            <ul className="contact__links">
               {links.map((link) => (
                 <li key={link.url}>
                   <a href={link.url} rel="noopener noreferrer" target="_blank">
@@ -120,17 +99,12 @@ export function Contact() {
                 </li>
               ))}
             </ul>
-          ) : (
-            <p className="contact__pending">
-              <span className="tag tag--starter">Not configured</span>
-              GitHub, LinkedIn and other profiles can be listed here — add them
-              to <code>contact.links</code>.
-            </p>
           )}
-        </Reveal>
-      </div>
 
-        <Reveal delay={160} className="contact__note">
+          <ResumeAction variant="ghost" />
+        </Reveal>
+
+        <Reveal delay={100} className="contact__form-wrap">
           <form className="contact__form" onSubmit={handleSubmit} noValidate>
             <div className="contact__field">
               <label htmlFor="contact-name">Name</label>
@@ -139,13 +113,20 @@ export function Contact() {
                 name="name"
                 type="text"
                 required
-                minLength={1}
-                maxLength={100}
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? 'contact-name-error' : undefined}
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
+                onBlur={() => markTouched('name')}
                 disabled={status === 'submitting'}
               />
+              {errors.name && (
+                <p id="contact-name-error" className="contact__field-error" role="alert">
+                  {errors.name}
+                </p>
+              )}
             </div>
+
             <div className="contact__field">
               <label htmlFor="contact-email">Email</label>
               <input
@@ -153,25 +134,41 @@ export function Contact() {
                 name="email"
                 type="email"
                 required
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'contact-email-error' : undefined}
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
+                onBlur={() => markTouched('email')}
                 disabled={status === 'submitting'}
               />
+              {errors.email && (
+                <p id="contact-email-error" className="contact__field-error" role="alert">
+                  {errors.email}
+                </p>
+              )}
             </div>
-            <div className="contact__field">
+
+            <div className="contact__field contact__field--full">
               <label htmlFor="contact-subject">Subject</label>
               <input
                 id="contact-subject"
                 name="subject"
                 type="text"
                 required
-                minLength={1}
-                maxLength={150}
+                aria-invalid={Boolean(errors.subject)}
+                aria-describedby={errors.subject ? 'contact-subject-error' : undefined}
                 value={form.subject}
                 onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                onBlur={() => markTouched('subject')}
                 disabled={status === 'submitting'}
               />
+              {errors.subject && (
+                <p id="contact-subject-error" className="contact__field-error" role="alert">
+                  {errors.subject}
+                </p>
+              )}
             </div>
+
             <div className="contact__field contact__field--full">
               <label htmlFor="contact-message">Message</label>
               <textarea
@@ -179,35 +176,38 @@ export function Contact() {
                 name="message"
                 rows={5}
                 required
-                minLength={1}
-                maxLength={2000}
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? 'contact-message-error' : undefined}
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
+                onBlur={() => markTouched('message')}
                 disabled={status === 'submitting'}
               />
+              {errors.message && (
+                <p id="contact-message-error" className="contact__field-error" role="alert">
+                  {errors.message}
+                </p>
+              )}
             </div>
+
             <div className="contact__form-actions">
               <button
                 type="submit"
                 className="btn btn--primary"
-                disabled={!canSubmit}
+                disabled={!canSubmit || !DELIVERY_CONFIGURED || status === 'submitting'}
                 aria-busy={status === 'submitting'}
               >
                 {status === 'submitting' ? 'Sending…' : 'Send message'}
               </button>
             </div>
-            {status === 'error' && error && (
-              <p className="contact__form-feedback contact__form-feedback--error" role="alert">
-                {error}
-              </p>
-            )}
-            {status === 'success' && successMsg && (
-              <p className="contact__form-feedback contact__form-feedback--success" role="status" aria-live="polite">
-                {successMsg}
-              </p>
-            )}
+
+            <p className="contact__delivery-note" role="status">
+              Message delivery is not configured yet. Use the email or profile links
+              to reach me directly.
+            </p>
           </form>
         </Reveal>
+      </div>
     </SectionShell>
   )
 }

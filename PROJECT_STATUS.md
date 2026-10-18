@@ -972,3 +972,10 @@ Committed locally. **Not pushed** (per local-only instruction).
 - Preserved approved portrait, navigation, routes, and existing dark navy/cyan identity.
 - Checks: tsc/lint/build clean. Browser verified production preview homepage headline/actions.
 - Commit: (pending) local only.
+
+## Phase 46
+- Contact section upgraded to polished two-column layout (invitation/links left, form right).
+- Form has accessible labels, required validation, inline email errors, disabled submit while processing, duplicate prevention.
+- Delivery not configured: submit remains disabled with clear note; no fake success.
+- Checks: tsc/lint/build clean. Browser verified two-column layout, 4 fields, submit disabled.
+- Commit: (pending) local only.
