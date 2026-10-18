@@ -75,17 +75,11 @@ export function Contact() {
             I respond to thoughtful, specific messages.
           </p>
 
-          {hasEmail ? (
+          {hasEmail && (
             <a className="btn btn--primary contact__mail" href={`mailto:${contact.email}`}>
               <MailIcon size={15} />
               {contact.email}
             </a>
-          ) : (
-            <p className="contact__pending">
-              <span className="tag tag--starter">Not configured</span>
-              No email address is set yet. Add <code>contact.email</code> in{' '}
-              <code>src/data/content.ts</code>.
-            </p>
           )}
 
           {links.length > 0 && (
@@ -99,6 +93,10 @@ export function Contact() {
                 </li>
               ))}
             </ul>
+          )}
+
+          {!hasEmail && links.length === 0 && (
+            <p className="contact__pending">Contact details will be added soon.</p>
           )}
 
           <ResumeAction variant="ghost" />
@@ -202,8 +200,8 @@ export function Contact() {
             </div>
 
             <p className="contact__delivery-note" role="status">
-              Message delivery is not configured yet. Use the email or profile links
-              to reach me directly.
+              The contact form is temporarily unavailable. Please use the available
+              contact links to reach me directly.
             </p>
           </form>
         </Reveal>
