@@ -586,12 +586,30 @@ export interface ExperienceEntry {
 export const experience: ExperienceEntry[] = [
   {
     id: 'exp-tvb',
-    role: 'AI & Automation Intern',
+    role: 'Agentic AI & Automation Intern',
     org: 'The Venture Build (TVB)',
-    period: '2024 — 2025 (confirm exact dates)',
+    period: 'Sep 2026 — Present',
     summary:
-      'Built AI-powered automation workflows and agentic systems using Python, APIs, and AI services. Worked on requirements, edge cases, failure points, and production-oriented solutions, and contributed to technical documentation.',
-    underReview: true,
+      'Contribute to AI-powered automation workflows using Python, APIs, and AI services for practical business processes. Analyze workflow requirements, investigate edge cases, and support reliable implementation and technical documentation.',
+    underReview: false,
+  },
+  {
+    id: 'exp-codealpha',
+    role: 'Full Stack Developer Intern',
+    org: 'CodeAlpha',
+    period: 'Mar 2026',
+    summary:
+      'Developed FastAPI backend services and integrated React components; implemented JWT authentication and PostgreSQL-backed data management.',
+    underReview: false,
+  },
+  {
+    id: 'exp-octanet',
+    role: 'Python Developer Intern',
+    org: 'OctaNet Services Pvt. Ltd.',
+    period: 'Jun 2024 — Aug 2024',
+    summary:
+      'Built Python automation scripts for data processing and workflow automation, reducing manual effort by 70-80%.',
+    underReview: false,
   },
 ]
 
@@ -686,10 +704,17 @@ export interface AchievementEntry {
 
 export const achievements: AchievementEntry[] = [
   {
+    id: 'ach-cgpa',
+    title: 'Academic performance — CGPA 9.08/10',
+    detail:
+      'B.Tech in Artificial Intelligence at Marwadi University (2023-2027) with a current CGPA of 9.08/10.',
+    underReview: false,
+  },
+  {
     id: 'ach-bookchapter',
     title: 'Book chapter — Ethical Implications of Predictive Rehabilitation Technologies',
     detail:
-      'Co-author of a book chapter on the ethical implications of predictive technologies in rehabilitation, published by IGI Global in April 2025. Chapter listing and DOI: 10.4018/979-8-3373-0194-5.ch017.',
+      'Co-author of a book chapter on the ethical implications of predictive technologies in rehabilitation, published by IGI Global in April 2025.',
     underReview: false,
     link: {
       label: 'DOI / chapter listing',
@@ -698,28 +723,34 @@ export const achievements: AchievementEntry[] = [
   },
   {
     id: 'ach-patent',
-    title: 'Published patent application (under review)',
+    title: 'Patent filed (India) — Thermal Management System for IT Infrastructure',
     detail:
-      'Reported contribution to a published patent application. The specific title, number, and status have not been confirmed for the site yet, so this entry is presented at a high level and marked under review.',
-    underReview: true,
-  },
-  {
-    id: 'ach-cert',
-    title: 'IBM Python 101 (September 2024)',
-    detail:
-      'Completed IBM Python 101 in September 2024. Included because you confirmed it; if the certificate details change, update them here.',
+      'Patent filed in India in 2025 for a Thermal Management System for IT Infrastructure.',
     underReview: false,
   },
   {
-    id: 'ach-placement',
-    title: 'SkillForge — 2024 Comerica Quality Education Challenge',
-    detail:
-      'SkillForge was presented as an AI-powered platform bridging education and employability for youth (ages 13–24) in the context of a Comerica Quality Education Challenge. This is a public reference to the project; included here as supporting context for the SkillForge case study, with the event framing kept separate from any performance claim.',
-    underReview: true,
-    link: {
-      label: 'SkillForge — 2024 Comerica Quality Education Challenge (video)',
-      url: 'https://www.youtube.com/watch?v=HMnNoPQfzdI',
-    },
+    id: 'ach-cert-azure',
+    title: 'Microsoft Azure Fundamentals (2026)',
+    detail: 'Completed Microsoft Azure Fundamentals in 2026.',
+    underReview: false,
+  },
+  {
+    id: 'ach-cert-aws',
+    title: 'AWS Academy — 6 badges (2025)',
+    detail: 'Earned six AWS Academy badges in 2025.',
+    underReview: false,
+  },
+  {
+    id: 'ach-cert-ibm',
+    title: 'IBM Python 101 (2024)',
+    detail: 'Completed IBM Python 101 in 2024.',
+    underReview: false,
+  },
+  {
+    id: 'ach-cert-oracle',
+    title: 'Oracle SQL (2024)',
+    detail: 'Completed Oracle SQL in 2024.',
+    underReview: false,
   },
 ]
 

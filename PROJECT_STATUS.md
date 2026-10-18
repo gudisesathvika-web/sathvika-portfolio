@@ -984,3 +984,9 @@ Committed locally. **Not pushed** (per local-only instruction).
 - Final responsive/accessibility polish: fixed contact form horizontal overflow, added focus-visible styles, verified modal behavior.
 - Checks: tsc/lint/build clean. Browser verified no horizontal overflow on homepage production preview.
 - Commit: (pending) local only.
+
+## Phase 48
+- Achievements updated: CGPA 9.08/10, book chapter with DOI, Indian patent (filed 2025, no invented number/status), confirmed certifications. Removed under-review/public editorial notes.
+- Experience restored to three verified entries: TVB, CodeAlpha, OctaNet (from resume).
+- Checks: tsc/lint/build clean. Browser verified achievements and experience pages.
+- Commit: (pending) local only.
