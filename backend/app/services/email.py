@@ -10,6 +10,8 @@ from abc import ABC, abstractmethod
 from email.message import EmailMessage
 from email.utils import formataddr
 
+import httpx
+
 from app.config import Settings, get_settings
 
 logger = logging.getLogger(__name__)
@@ -231,6 +233,68 @@ class SmtpEmailProvider(EmailProvider):
         logger.info("smtp delivery accepted")
 
 
+class ResendEmailProvider(EmailProvider):
+    def __init__(self, settings: Settings) -> None:
+        self.settings = settings
+
+    def _validate_config(self) -> tuple[str, str, str, str]:
+        if not self.settings.contact_api_key.strip():
+            raise EmailProviderError("Email delivery is not configured.")
+        if not self.settings.contact_from_email.strip() or not self.settings.contact_to_email.strip():
+            raise EmailProviderError("Email delivery is not configured.")
+        endpoint = self.settings.contact_endpoint_url.strip() or "https://api.resend.com/emails"
+        timeout = max(1, int(self.settings.smtp_timeout_seconds or 10))
+        return endpoint, timeout, self.settings.contact_from_email.strip(), self.settings.contact_to_email.strip()
+
+    def send_contact(
+        self,
+        *,
+        sender_name: str,
+        sender_email: str,
+        subject: str,
+        message: str,
+    ) -> None:
+        endpoint, timeout, from_email, to_email = self._validate_config()
+        from_name = self.settings.contact_from_name.strip() or from_email
+        to_name = self.settings.contact_to_name.strip() or to_email
+        payload = {
+            "from": f"{from_name} <{from_email}>",
+            "to": [f"{to_name} <{to_email}>"],
+            "subject": subject,
+            "reply_to": sender_email,
+            "text": f"Name: {sender_name}\nEmail: {sender_email}\n\n{message}",
+        }
+        headers = {
+            "Authorization": f"Bearer {self.settings.contact_api_key.strip()}",
+            "Content-Type": "application/json",
+        }
+        logger.info("resend delivery started")
+        try:
+            with httpx.Client(timeout=timeout) as client:
+                response = client.post(endpoint, json=payload, headers=headers)
+            if response.status_code < 200 or response.status_code >= 300:
+                logger.warning("resend delivery failed: category=http_%s", response.status_code)
+                raise EmailProviderError("Email delivery failed.")
+            try:
+                data = response.json()
+            except ValueError:
+                data = {}
+            request_id = data.get("id") if isinstance(data, dict) else None
+            if request_id:
+                logger.info("resend delivery accepted: id=%s", request_id)
+            else:
+                logger.info("resend delivery accepted")
+        except httpx.TimeoutException:
+            logger.warning("resend delivery failed: category=timeout")
+            raise EmailProviderError("Email delivery failed.")
+        except httpx.HTTPError:
+            logger.warning("resend delivery failed: category=connection")
+            raise EmailProviderError("Email delivery failed.")
+        except Exception:
+            logger.warning("resend delivery failed: category=unexpected")
+            raise EmailProviderError("Email delivery failed.")
+
+
 def _build_provider(settings: Settings) -> EmailProvider:
     provider = settings.contact_provider.strip().lower() or "mock"
 
@@ -241,6 +305,10 @@ def _build_provider(settings: Settings) -> EmailProvider:
     if provider == "smtp":
         logger.info("email provider selected: smtp")
         return SmtpEmailProvider(settings)
+
+    if provider == "resend":
+        logger.info("email provider selected: resend")
+        return ResendEmailProvider(settings)
 
     # Unknown provider values must never silently simulate delivery.
     logger.warning(
