@@ -2,6 +2,7 @@
 """Email provider abstraction (mockable)."""
 from __future__ import annotations
 
+import html
 import logging
 import smtplib
 import socket
@@ -295,6 +296,94 @@ class ResendEmailProvider(EmailProvider):
             raise EmailProviderError("Email delivery failed.")
 
 
+class BrevoEmailProvider(EmailProvider):
+    def __init__(self, settings: Settings) -> None:
+        self.settings = settings
+
+    def _validate_config(self) -> tuple[str, str, str, int]:
+        if not self.settings.contact_api_key.strip():
+            raise EmailProviderError("Email delivery is not configured.")
+        if not self.settings.contact_from_email.strip() or not self.settings.contact_to_email.strip():
+            raise EmailProviderError("Email delivery is not configured.")
+        endpoint = "https://api.brevo.com/v3/smtp/email"
+        timeout = max(1, int(self.settings.smtp_timeout_seconds or 10))
+        return endpoint, timeout, self.settings.contact_from_email.strip(), self.settings.contact_to_email.strip()
+
+    def send_contact(
+        self,
+        *,
+        sender_name: str,
+        sender_email: str,
+        subject: str,
+        message: str,
+    ) -> None:
+        endpoint, timeout, from_email, to_email = self._validate_config()
+        from_name = self.settings.contact_from_name.strip() or from_email
+        to_name = self.settings.contact_to_name.strip() or to_email
+        text_content = (
+            f"Name: {sender_name}\n"
+            f"Email: {sender_email}\n\n"
+            f"{message}"
+        )
+        html_content = (
+            "<p><strong>Name:</strong> "
+            + html.escape(sender_name)
+            + "</p><p><strong>Email:</strong> "
+            + html.escape(sender_email)
+            + "</p><p>"
+            + html.escape(message).replace("\\n", "<br>")
+            + "</p>"
+        )
+        payload = {
+            "sender": {"name": from_name, "email": from_email},
+            "to": [{"name": to_name, "email": to_email}],
+            "subject": subject,
+            "replyTo": {"name": sender_name, "email": sender_email},
+            "textContent": text_content,
+            "htmlContent": html_content,
+        }
+        headers = {
+            "api-key": self.settings.contact_api_key.strip(),
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        logger.info("brevo delivery started")
+        try:
+            with httpx.Client(timeout=timeout) as client:
+                response = client.post(endpoint, json=payload, headers=headers)
+            if response.status_code < 200 or response.status_code >= 300:
+                if response.status_code in (401, 403):
+                    category = "authentication"
+                elif response.status_code == 400:
+                    category = "invalid_request"
+                elif response.status_code == 429:
+                    category = "rate_limited"
+                elif 500 <= response.status_code < 600:
+                    category = "provider_error"
+                else:
+                    category = "http_error"
+                logger.warning("brevo delivery failed: category=%s", category)
+                raise EmailProviderError("Email delivery failed.")
+            try:
+                data = response.json()
+            except ValueError:
+                data = {}
+            message_id = data.get("messageId") if isinstance(data, dict) else None
+            if message_id:
+                logger.info("brevo delivery accepted: id=%s", message_id)
+            else:
+                logger.info("brevo delivery accepted")
+        except httpx.TimeoutException:
+            logger.warning("brevo delivery failed: category=timeout")
+            raise EmailProviderError("Email delivery failed.")
+        except httpx.HTTPError:
+            logger.warning("brevo delivery failed: category=connection")
+            raise EmailProviderError("Email delivery failed.")
+        except Exception:
+            logger.warning("brevo delivery failed: category=unexpected")
+            raise EmailProviderError("Email delivery failed.")
+
+
 def _build_provider(settings: Settings) -> EmailProvider:
     provider = settings.contact_provider.strip().lower() or "mock"
 
@@ -309,6 +398,10 @@ def _build_provider(settings: Settings) -> EmailProvider:
     if provider == "resend":
         logger.info("email provider selected: resend")
         return ResendEmailProvider(settings)
+
+    if provider == "brevo":
+        logger.info("email provider selected: brevo")
+        return BrevoEmailProvider(settings)
 
     # Unknown provider values must never silently simulate delivery.
     logger.warning(
