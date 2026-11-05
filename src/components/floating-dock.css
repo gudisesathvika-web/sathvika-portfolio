@@ -1,0 +1,149 @@
+/* ==========================================================================
+   Floating Quick-Action Dock Styles
+   ========================================================================== */
+
+.floating-dock {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  opacity: 0;
+  transform: translateY(18px) scale(0.95);
+  pointer-events: none;
+  transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+}
+
+.floating-dock--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.floating-dock__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.55rem;
+  background: color-mix(in srgb, var(--surface) 85%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent) !important;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.7), 0 0 20px -5px color-mix(in srgb, var(--accent) 30%, transparent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.floating-dock__divider {
+  width: 1px;
+  height: 18px;
+  background: var(--hairline-strong);
+  margin-inline: 0.15rem;
+}
+
+.floating-dock__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+  text-decoration: none;
+}
+
+.floating-dock__btn:hover {
+  background: color-mix(in srgb, var(--surface-elevated) 90%, transparent);
+  border-color: var(--accent-line);
+  color: var(--text-1);
+  transform: translateY(-2px);
+}
+
+.floating-dock__btn--terminal {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.floating-dock__btn--terminal:hover {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: #FFFFFF;
+}
+
+.floating-dock__prompt {
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.floating-dock__label {
+  font-size: 0.74rem;
+  font-weight: 500;
+}
+
+.floating-dock__btn--top {
+  padding: 0.45rem 0.55rem;
+  border-radius: 50%;
+}
+
+/* --- Toast Notification --- */
+
+.dock-toast {
+  position: fixed;
+  bottom: 4.8rem;
+  right: 1.5rem;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface-elevated) 95%, black 5%);
+  border: 1px solid var(--accent);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 20px -5px var(--accent);
+  color: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  animation: slideUpFade 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dock-toast__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .floating-dock {
+    bottom: 1rem;
+    right: 50%;
+    transform: translateX(50%) translateY(18px) scale(0.95);
+  }
+
+  .floating-dock--visible {
+    transform: translateX(50%) translateY(0) scale(1);
+  }
+
+  .dock-toast {
+    bottom: 4.5rem;
+    right: 50%;
+    transform: translateX(50%);
+    width: max-content;
+    max-width: 90vw;
+  }
+}
+

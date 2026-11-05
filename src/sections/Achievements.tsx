@@ -9,7 +9,7 @@ import { ExternalIcon } from '../components/icons'
  * are still being confirmed carry an explicit "under review" label.
  */
 export function Achievements() {
-  const { achievements: published, loading, error, retry } = usePublishedAchievements()
+  const { achievements: published } = usePublishedAchievements()
   const achievements = published.length ? published : staticAchievements.map((entry) => ({
     id: entry.id,
     category: 'Achievement',
@@ -31,15 +31,6 @@ export function Achievements() {
       title="Milestones worth keeping."
       lede="Awards, certifications, and milestones — each one listed only when it can be supported."
     >
-      {loading && <p className="achievements__loading">Loading achievements…</p>}
-      {error && achievements.length === 0 && (
-        <p className="achievements__error">
-          {error}{' '}
-          <button type="button" onClick={retry}>
-            Retry
-          </button>
-        </p>
-      )}
       <ul className="achievements__list">
         {achievements.map((entry, index) => (
           <Reveal as="li" key={entry.id} delay={index * 90}>

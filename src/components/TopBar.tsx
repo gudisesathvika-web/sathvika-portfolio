@@ -11,6 +11,8 @@ import './topbar.css'
 /** Route-aware primary navigation. */
 const NAV = [
   { label: 'Home', to: '/', anchor: undefined as string | undefined, id: 'top' },
+  { label: 'Featured', to: '/', anchor: 'featured-work', id: 'featured-work' },
+  { label: 'Skills', to: '/', anchor: 'skills', id: 'skills' },
   { label: 'About', to: '/', anchor: 'about', id: 'about' },
   { label: 'Projects', to: '/projects', anchor: undefined, id: 'projects' },
   { label: 'Resume', to: '/resume', anchor: undefined, id: 'resume' },
@@ -19,9 +21,9 @@ const NAV = [
   { label: 'Contact', to: '/', anchor: 'contact', id: 'contact' },
 ]
 
-const sectionIds = navLinks
+const sectionIds = ['top', 'featured-work', 'skills', 'about', 'contact', ...navLinks
   .filter((link) => link.href.startsWith('#'))
-  .map((link) => link.href.replace('#', ''))
+  .map((link) => link.href.replace('#', ''))]
 
 /**
  * Compact sticky navigation.

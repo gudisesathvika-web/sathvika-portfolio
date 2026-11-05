@@ -23,7 +23,7 @@ const API_BASE = ((import.meta.env.VITE_API_URL as string | undefined) ?? '').re
 
 /**
  * Contact section: two-column layout with professional links and an accessible
- * message form. Delivery is not configured, so the form never claims success.
+ * message form.
  */
 export function Contact() {
   const hasEmail = contact.email.trim().length > 0
@@ -33,6 +33,7 @@ export function Contact() {
   const [touched, setTouched] = useState<Partial<Record<keyof ContactFormState, boolean>>>({})
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [feedback, setFeedback] = useState('')
+  const [copiedEmail, setCopiedEmail] = useState(false)
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
@@ -53,6 +54,16 @@ export function Contact() {
 
   const markTouched = (field: keyof ContactFormState) =>
     setTouched((previous) => ({ ...previous, [field]: true }))
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(contact.email)
+      setCopiedEmail(true)
+      setTimeout(() => setCopiedEmail(false), 2200)
+    } catch {
+      window.location.href = `mailto:${contact.email}`
+    }
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -90,7 +101,7 @@ export function Contact() {
       }
     } catch {
       setStatus('error')
-      setFeedback('Could not reach the portfolio API. Check that the backend is running.')
+      setFeedback('Could not reach the portfolio API. Feel free to copy or email directly.')
     }
   }
 
@@ -110,10 +121,20 @@ export function Contact() {
           </p>
 
           {hasEmail && (
-            <a className="btn btn--primary contact__mail" href={`mailto:${contact.email}`}>
-              <MailIcon size={15} />
-              {contact.email}
-            </a>
+            <div className="contact__mail-group" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', width: '100%' }}>
+              <a className="btn btn--primary contact__mail" href={`mailto:${contact.email}`}>
+                <MailIcon size={15} />
+                Send Email
+              </a>
+              <button
+                type="button"
+                className="btn btn--ghost"
+                onClick={handleCopyEmail}
+                aria-label="Copy email address"
+              >
+                {copiedEmail ? '✓ Copied to clipboard!' : `Copy ${contact.email}`}
+              </button>
+            </div>
           )}
 
           {links.length > 0 && (

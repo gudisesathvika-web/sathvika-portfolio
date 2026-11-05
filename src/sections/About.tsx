@@ -4,7 +4,8 @@ import { SectionShell } from '../components/SectionShell'
 import { Reveal } from '../components/Reveal'
 
 export function About() {
-  const { about: published, loading, error, retry } = usePublishedAbout()
+  const { about: published } = usePublishedAbout()
+  // Seamlessly use published if available, otherwise always use static verified content
   const about = published
     ? { title: published.title, paragraphs: published.paragraphs, facts: published.facts }
     : staticAbout
@@ -15,17 +16,9 @@ export function About() {
       index="01"
       kicker="About"
       title={about.title}
-      lede="Curiosity first, ambition close behind — and technology that has to earn its place." aria-describedby="about-lede"
+      lede="Curiosity first, ambition close behind — and technology that has to earn its place."
+      aria-describedby="about-lede"
     >
-      {loading && <p className="about__loading">Loading About content…</p>}
-      {error && (
-        <p className="about__error">
-          {error}{' '}
-          <button type="button" onClick={retry}>
-            Retry
-          </button>
-        </p>
-      )}
       <div className="about__grid">
         <div className="about__prose">
           {about.paragraphs.map((paragraph, index) => (

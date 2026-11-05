@@ -1,0 +1,124 @@
+/* ==========================================================================
+   UI Polish — Phase 3 & 4 Enhancements
+   Glassmorphism, hover elevation, glowing interactive states
+   ========================================================================== */
+
+/* --- Project Cards (Library & Sub-pages) --- */
+.project-card {
+  background: color-mix(in srgb, var(--surface) 68%, transparent) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid var(--hairline-strong) !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out) !important;
+}
+
+.project-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: var(--accent-line) !important;
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.65), 0 0 28px -6px color-mix(in srgb, var(--accent) 35%, transparent) !important;
+}
+
+.project-card__title {
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.project-card:hover .project-card__title {
+  color: var(--accent) !important;
+}
+
+.project-card__stack li {
+  background: color-mix(in srgb, var(--surface-elevated) 80%, transparent) !important;
+  border-color: var(--hairline) !important;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.project-card:hover .project-card__stack li {
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* --- Search & Filter Controls --- */
+.projects__search {
+  background: color-mix(in srgb, var(--surface) 50%, transparent) !important;
+  border: 1px solid var(--hairline-strong) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+
+.projects__search:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 20px -3px color-mix(in srgb, var(--accent) 35%, transparent) !important;
+}
+
+.filter-pill {
+  transition: all var(--dur-fast) var(--ease-out) !important;
+}
+
+.filter-pill:hover {
+  border-color: var(--accent-line) !important;
+  color: var(--text-1) !important;
+}
+
+/* --- Experience Timeline --- */
+.timeline {
+  border-left-color: var(--hairline-strong) !important;
+}
+
+.timeline__marker {
+  background: var(--accent) !important;
+  box-shadow: 0 0 0 4px var(--background), 0 0 16px color-mix(in srgb, var(--accent) 80%, transparent) !important;
+}
+
+.timeline__item {
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  transition: all var(--dur) var(--ease-out);
+}
+
+.timeline__item:hover {
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+  border-color: var(--hairline);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: translateX(4px);
+}
+
+/* --- Achievements --- */
+.achievement {
+  background: color-mix(in srgb, var(--surface) 60%, transparent) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--hairline-strong) !important;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out) !important;
+}
+
+.achievement:hover {
+  transform: translateY(-3px) !important;
+  border-color: var(--accent-line) !important;
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.6), 0 0 25px -6px color-mix(in srgb, var(--accent) 25%, transparent) !important;
+}
+
+.achievement__marker {
+  border-color: var(--cat-achievements) !important;
+  background: color-mix(in srgb, var(--cat-achievements) 25%, transparent) !important;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--cat-achievements) 40%, transparent);
+}
+
+/* --- Modal & Drawer Glassmorphism --- */
+.project-modal__backdrop {
+  background: rgba(9, 13, 22, 0.75) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.project-modal__panel {
+  background: color-mix(in srgb, var(--surface) 90%, transparent) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--hairline-strong) !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px -10px color-mix(in srgb, var(--accent) 30%, transparent) !important;
+}
+

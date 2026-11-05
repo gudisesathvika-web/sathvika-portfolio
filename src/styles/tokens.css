@@ -1,21 +1,23 @@
 /* ==========================================================================
    Design tokens — Sathvika Gudise portfolio
-   Theme system: dark Forest & Leaf, light Wine & Light Sand.
+   Theme system: 
+     - Dark: Velvet Obsidian & Electric Amethyst / Rosé Orchid
+     - Light: Soft Cloud Lilac & Royal Purple
    ========================================================================== */
 
 :root {
   color-scheme: dark;
 
-  /* --- Theme tokens: dark (Forest & Leaf) --- */
-  --background: #10251B;
-  --surface: #1A3526;
-  --surface-elevated: #234431;
-  --text-primary: #F0F4E9;
-  --text-secondary: #B7C7B8;
-  --accent: #A7C98B;
-  --accent-hover: #BBD8A5;
-  --border: #355541;
-  --highlight: #D7E5C8;
+  /* --- Theme tokens: dark (Velvet Obsidian & Electric Amethyst) --- */
+  --background: #0B0A12;
+  --surface: #141222;
+  --surface-elevated: #1F1B33;
+  --text-primary: #FAF5FF;
+  --text-secondary: #B4B0C7;
+  --accent: #A855F7;
+  --accent-hover: #C084FC;
+  --border: #2D2545;
+  --highlight: #F472B6;
 
   /* --- Compatibility tokens (dark) --- */
   --ink-950: var(--background);
@@ -25,7 +27,7 @@
   --graphite: var(--surface);
   --graphite-2: var(--surface-elevated);
 
-  --hairline: color-mix(in srgb, var(--border) 70%, transparent);
+  --hairline: color-mix(in srgb, var(--border) 75%, transparent);
   --hairline-strong: color-mix(in srgb, var(--border) 100%, transparent);
 
   --text-1: var(--text-primary);
@@ -33,29 +35,29 @@
   --text-3: color-mix(in srgb, var(--text-secondary) 75%, transparent);
 
   --accent-2: var(--accent-hover);
-  --accent-ink: var(--background);
-  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-ink: #0A0512;
+  --accent-soft: color-mix(in srgb, var(--accent) 15%, transparent);
   --accent-line: color-mix(in srgb, var(--accent) 45%, transparent);
 
-  /* --- Constellation categories --- */
+  /* --- Category accent badges --- */
   --cat-identity: var(--accent);
   --cat-now: var(--accent-hover);
   --cat-projects: var(--highlight);
-  --cat-skills: #3fd6bd;
-  --cat-achievements: #d8b15a;
+  --cat-skills: #34D399;
+  --cat-achievements: #F59E0B;
 
   /* --- Typography --- */
   --font-display: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  --text-xs: 0.72rem;
-  --text-sm: 0.84rem;
-  --text-base: clamp(0.97rem, 0.93rem + 0.18vw, 1.05rem);
-  --text-lg: clamp(1.1rem, 1.02rem + 0.4vw, 1.28rem);
-  --text-xl: clamp(1.35rem, 1.2rem + 0.8vw, 1.7rem);
-  --text-2xl: clamp(1.9rem, 1.5rem + 2vw, 2.7rem);
-  --text-hero: clamp(2.7rem, 1.7rem + 5.2vw, 5.6rem);
+  --text-xs: 0.75rem;
+  --text-sm: 0.85rem;
+  --text-base: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+  --text-lg: clamp(1.12rem, 1.05rem + 0.4vw, 1.32rem);
+  --text-xl: clamp(1.4rem, 1.25rem + 0.8vw, 1.8rem);
+  --text-2xl: clamp(2rem, 1.6rem + 2.2vw, 3rem);
+  --text-hero: clamp(2.8rem, 1.8rem + 5.5vw, 5.8rem);
 
   /* --- Space & layout --- */
   --space-1: 0.25rem;
@@ -66,13 +68,13 @@
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 4.5rem;
-  --section-y: clamp(4rem, 3rem + 6vw, 7.5rem);
+  --section-y: clamp(4.5rem, 3.5rem + 6vw, 8rem);
   --container: 76rem;
-  --nav-height: 4rem;
+  --nav-height: 4.25rem;
 
-  --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 16px;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 20px;
   --radius-pill: 999px;
 
   /* --- Motion --- */
@@ -81,23 +83,25 @@
   --dur: 260ms;
   --dur-slow: 600ms;
 
-  /* --- Elevation --- */
-  --shadow-panel: 0 24px 60px -32px rgba(0, 0, 0, 0.9);
+  /* --- Elevation & Glow --- */
+  --shadow-panel: 0 24px 60px -24px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  --shadow-glow: 0 0 40px -10px color-mix(in srgb, var(--accent) 30%, transparent);
+  --shadow-card: 0 10px 30px -15px rgba(0, 0, 0, 0.7);
 }
 
 [data-theme="light"] {
   color-scheme: light;
 
-  /* --- Theme tokens: light (Wine & Light Sand) --- */
-  --background: #F4E9D8;
-  --surface: #FBF6ED;
-  --surface-elevated: #FFFFFF;
-  --text-primary: #35231F;
-  --text-secondary: #6F5A4E;
-  --accent: #8A2635;
-  --accent-hover: #70202C;
-  --border: #DCCBB8;
-  --highlight: #B85A64;
+  /* --- Theme tokens: light (Soft Cloud Lilac & Royal Purple) --- */
+  --background: #FAF7FD;
+  --surface: #FFFFFF;
+  --surface-elevated: #F4ECFB;
+  --text-primary: #1C152B;
+  --text-secondary: #584F6E;
+  --accent: #9333EA;
+  --accent-hover: #7E22CE;
+  --border: #E8DCF5;
+  --highlight: #DB2777;
 
   /* --- Compatibility tokens (light) --- */
   --ink-950: var(--background);
@@ -107,7 +111,7 @@
   --graphite: var(--surface);
   --graphite-2: var(--surface-elevated);
 
-  --hairline: color-mix(in srgb, var(--border) 70%, transparent);
+  --hairline: color-mix(in srgb, var(--border) 80%, transparent);
   --hairline-strong: color-mix(in srgb, var(--border) 100%, transparent);
 
   --text-1: var(--text-primary);
@@ -115,17 +119,19 @@
   --text-3: color-mix(in srgb, var(--text-secondary) 75%, transparent);
 
   --accent-2: var(--accent-hover);
-  --accent-ink: var(--surface-elevated);
-  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
-  --accent-line: color-mix(in srgb, var(--accent) 40%, transparent);
+  --accent-ink: #FFFFFF;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-line: color-mix(in srgb, var(--accent) 35%, transparent);
 
   --cat-identity: var(--accent);
   --cat-now: var(--accent-hover);
   --cat-projects: var(--highlight);
-  --cat-skills: #3fd6bd;
-  --cat-achievements: #d8b15a;
+  --cat-skills: #059669;
+  --cat-achievements: #D97706;
 
-  --shadow-panel: 0 24px 60px -32px rgba(53, 35, 31, 0.18);
+  --shadow-panel: 0 24px 60px -28px rgba(28, 21, 43, 0.12), 0 0 1px 1px rgba(28, 21, 43, 0.05);
+  --shadow-glow: 0 0 35px -8px color-mix(in srgb, var(--accent) 22%, transparent);
+  --shadow-card: 0 10px 25px -10px rgba(28, 21, 43, 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { ComponentType } from 'react'
 import { HomePage } from './pages/HomePage'
 import { ProjectsPage } from './pages/ProjectsPage'
@@ -8,10 +8,13 @@ import { AchievementsPage } from './pages/AchievementsPage'
 import { Footer } from './components/Footer'
 import { TopBar } from './components/TopBar'
 import { AdminApp } from './components/admin/AdminApp'
+import { FloatingDock } from './components/FloatingDock'
+import { InteractiveTerminal } from './components/InteractiveTerminal'
 import { useHash, usePathname } from './router'
 import './styles/sections.css'
 import './styles/case-study.css'
 import './styles/pages.css'
+import './styles/polish.css'
 
 const ROUTES: Record<string, ComponentType> = {
   '/projects': ProjectsPage,
@@ -28,6 +31,7 @@ function isAdminRoute(path: string, hash: string): boolean {
 export default function App() {
   const path = usePathname()
   const hash = useHash()
+  const [terminalOpen, setTerminalOpen] = useState(false)
 
   // Keep the scroll position sensible on route changes.
   useEffect(() => {
@@ -48,6 +52,10 @@ export default function App() {
       <TopBar />
       <main id="main">{Page ? <Page /> : <HomePage />}</main>
       <Footer />
+
+      {/* Phase 4: Floating Quick Action Dock & Interactive CLI */}
+      <FloatingDock onOpenTerminal={() => setTerminalOpen(true)} />
+      <InteractiveTerminal isOpen={terminalOpen} onClose={() => setTerminalOpen(false)} />
     </>
   )
 }
