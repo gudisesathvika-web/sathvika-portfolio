@@ -50,3 +50,5 @@ htmlcov/
 
 # Local generated preview assets (not for commit)
 preview_projects/
+powershell.bat
+powershell.cmd
