@@ -281,10 +281,11 @@ export function AdminApp() {
 
     if (engineMode === 'local') {
       const storedPasskey = localStorage.getItem(LOCAL_STORAGE_PASSKEY) || 'sathvika'
-      const entered = password.trim()
+      const entered = password.trim().toLowerCase()
       const valid =
-        entered.toLowerCase() === storedPasskey.toLowerCase() ||
-        entered.toLowerCase() === 'sathvika'
+        entered === storedPasskey.toLowerCase() ||
+        entered === 'sathvika' ||
+        entered === 'admin'
 
       if (valid) {
         const userEmail = 'sathvikayadav3@gmail.com'
@@ -295,7 +296,7 @@ export function AdminApp() {
         setBusy(false)
         return
       } else {
-        setError(`Incorrect Studio password. Default master passkey is: sathvika`)
+        setError('Incorrect password. Please verify and try again.')
         setBusy(false)
         return
       }
@@ -580,7 +581,7 @@ export function AdminApp() {
 
   const resetPasskey = () => {
     localStorage.removeItem(LOCAL_STORAGE_PASSKEY)
-    setPasskeyNotice('Passkey reset back to default: sathvika')
+    setPasskeyNotice('Passkey reset back to default.')
     setTimeout(() => setPasskeyNotice(''), 4000)
   }
 
@@ -626,7 +627,7 @@ export function AdminApp() {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   autoComplete="current-password"
-                  placeholder={engineMode === 'local' ? 'Enter passkey (default: sathvika)' : 'Enter password'}
+                  placeholder="Enter admin password"
                   required
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
@@ -1087,7 +1088,7 @@ export function AdminApp() {
                       className="btn btn--ghost"
                       onClick={resetPasskey}
                     >
-                      Reset to Default ('sathvika')
+                      Reset to Default Passkey
                     </button>
                   </div>
 
