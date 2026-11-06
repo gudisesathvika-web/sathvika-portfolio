@@ -15,7 +15,7 @@ export function HomeHero() {
           {/* Status Indicator */}
           <div className="home-hero__status">
             <span className="home-hero__status-dot" aria-hidden="true" />
-            <span className="mono">Available for AI Engineering Roles</span>
+            <span className="mono">Open to Remote &amp; Hybrid · Full-Time, Part-Time &amp; Freelance</span>
           </div>
 
           <h1 className="home-hero__title" id="home-hero-title">
@@ -24,14 +24,14 @@ export function HomeHero() {
           </h1>
 
           <p className="home-hero__role">
-            <span className="home-hero__chip">Applied AI</span>
-            <span className="home-hero__chip">Agentic Workflows</span>
+            <span className="home-hero__chip">Applied AI &amp; Vision</span>
+            <span className="home-hero__chip">Agentic Automations</span>
             <span className="home-hero__chip">Full-Stack Systems</span>
           </p>
 
           <p className="home-hero__intro">
             I am {site.name}, an AI engineering student who designs and ships practical intelligent systems —
-            turning complex models and automated workflows into clean, accessible products people can actually use.
+            from multimodal deep learning and document forgery detection to autonomous B2B and grant intelligence pipelines.
           </p>
 
           <div className="home-hero__actions">
@@ -58,15 +58,19 @@ export function HomeHero() {
           <dl className="home-hero__facts">
             <div>
               <dt>Focus</dt>
-              <dd>Applied AI &amp; Intelligent Systems</dd>
+              <dd>Applied AI, Computer Vision &amp; Automations</dd>
             </div>
             <div>
-              <dt>Location</dt>
-              <dd>{site.location} · Open to Remote</dd>
+              <dt>Availability</dt>
+              <dd>Remote &amp; Hybrid · Full-Time, Part-Time &amp; Freelance</dd>
+            </div>
+            <div>
+              <dt>Clients &amp; Market</dt>
+              <dd>India, US &amp; Global Teams</dd>
             </div>
             <div>
               <dt>Core Stack</dt>
-              <dd>Python · LangChain · FastAPI · React</dd>
+              <dd>Python · PyTorch · FastAPI · LangChain · React</dd>
             </div>
           </dl>
         </div>

@@ -1,10 +1,67 @@
+import { useState } from 'react'
 import { projects } from '../data/content'
 import { Link } from './RouterLink'
 import { ArrowRightIcon, GitHubIcon } from './icons'
 import './featured-projects.css'
 
+type FilterCategory = 'all' | 'ai-cv' | 'automation' | 'systems'
+
 export function FeaturedProjects() {
-  const featured = projects.filter((p) => p.status === 'featured').slice(0, 2)
+  const [filter, setFilter] = useState<FilterCategory>('all')
+
+  const allFeatured = projects.filter((p) => p.status === 'featured')
+
+  const filtered = allFeatured.filter((p) => {
+    if (filter === 'ai-cv') {
+      return (
+        p.id === 'crisis-mind' ||
+        p.id === 'smartid' ||
+        p.direction.toLowerCase().includes('vision') ||
+        p.direction.toLowerCase().includes('multimodal')
+      )
+    }
+    if (filter === 'automation') {
+      return (
+        p.id === 'scoutiq' ||
+        p.id === 'grant-automator' ||
+        p.direction.toLowerCase().includes('automation') ||
+        p.direction.toLowerCase().includes('lead')
+      )
+    }
+    if (filter === 'systems') {
+      return (
+        p.id === 'skillforge' ||
+        p.id === 'accessguard' ||
+        p.direction.toLowerCase().includes('learning') ||
+        p.direction.toLowerCase().includes('anomaly')
+      )
+    }
+    return true
+  })
+
+  const aiCount = allFeatured.filter(
+    (p) =>
+      p.id === 'crisis-mind' ||
+      p.id === 'smartid' ||
+      p.direction.toLowerCase().includes('vision') ||
+      p.direction.toLowerCase().includes('multimodal'),
+  ).length
+
+  const automationCount = allFeatured.filter(
+    (p) =>
+      p.id === 'scoutiq' ||
+      p.id === 'grant-automator' ||
+      p.direction.toLowerCase().includes('automation') ||
+      p.direction.toLowerCase().includes('lead'),
+  ).length
+
+  const systemsCount = allFeatured.filter(
+    (p) =>
+      p.id === 'skillforge' ||
+      p.id === 'accessguard' ||
+      p.direction.toLowerCase().includes('learning') ||
+      p.direction.toLowerCase().includes('anomaly'),
+  ).length
 
   return (
     <section className="featured-work" id="featured-work" aria-labelledby="featured-work-title">
@@ -12,18 +69,59 @@ export function FeaturedProjects() {
         <header className="featured-work__head">
           <div className="featured-work__kicker-wrap">
             <span className="kicker mono">Selected Engineering</span>
-            <span className="featured-work__count mono">02 Flagship Systems</span>
+            <span className="featured-work__count mono">
+              {String(allFeatured.length).padStart(2, '0')} Flagship Systems
+            </span>
           </div>
           <h2 className="featured-work__title" id="featured-work-title">
             Featured Projects
           </h2>
           <p className="featured-work__lede">
-            Real intelligent systems with working architectures, practical problem spaces, and verified codebases.
+            Real intelligent systems with working architectures, practical problem spaces, forensic heatmaps, and verified codebases.
           </p>
+
+          <div className="featured-work__filters" role="tablist" aria-label="Filter featured projects">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={filter === 'all'}
+              className={`featured-filter-btn ${filter === 'all' ? 'featured-filter-btn--active' : ''}`}
+              onClick={() => setFilter('all')}
+            >
+              All Flagships <span className="featured-filter-count">{allFeatured.length}</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={filter === 'ai-cv'}
+              className={`featured-filter-btn ${filter === 'ai-cv' ? 'featured-filter-btn--active' : ''}`}
+              onClick={() => setFilter('ai-cv')}
+            >
+              AI &amp; Computer Vision <span className="featured-filter-count">{aiCount}</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={filter === 'automation'}
+              className={`featured-filter-btn ${filter === 'automation' ? 'featured-filter-btn--active' : ''}`}
+              onClick={() => setFilter('automation')}
+            >
+              Autonomous Automations <span className="featured-filter-count">{automationCount}</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={filter === 'systems'}
+              className={`featured-filter-btn ${filter === 'systems' ? 'featured-filter-btn--active' : ''}`}
+              onClick={() => setFilter('systems')}
+            >
+              Adaptive &amp; Security Systems <span className="featured-filter-count">{systemsCount}</span>
+            </button>
+          </div>
         </header>
 
         <div className="featured-work__grid">
-          {featured.map((project, idx) => {
+          {filtered.map((project, idx) => {
             const repoLink = project.links.find((l) => /github\.com/i.test(l.url))
             return (
               <article key={project.id} className="featured-card glass-panel">
@@ -106,4 +204,3 @@ export function FeaturedProjects() {
     </section>
   )
 }
-
