@@ -18,6 +18,7 @@ const LOCAL_STORAGE_PROJECTS = 'sathvika_studio_projects'
 const LOCAL_STORAGE_ABOUT = 'sathvika_studio_about'
 const LOCAL_STORAGE_ACHIEVEMENTS = 'sathvika_studio_achievements'
 const LOCAL_STORAGE_SESSION = 'sathvika_studio_session'
+const LOCAL_STORAGE_PASSKEY = 'sathvika_studio_passkey'
 
 export type Project = {
   id: string
@@ -155,6 +156,10 @@ export function AdminApp() {
   const [editingAchievementId, setEditingAchievementId] = useState<string | null>(null)
   const [copiedCode, setCopiedCode] = useState(false)
 
+  // Security passkey settings
+  const [newPasskeyInput, setNewPasskeyInput] = useState('')
+  const [passkeyNotice, setPasskeyNotice] = useState('')
+
   // Load data for Local Studio Mode
   const loadLocalData = useCallback(() => {
     setProjectsLoading(true)
@@ -275,7 +280,12 @@ export function AdminApp() {
     setBusy(true)
 
     if (engineMode === 'local') {
-      const valid = password.trim().toLowerCase() === 'sathvika' || password.trim().length >= 4
+      const storedPasskey = localStorage.getItem(LOCAL_STORAGE_PASSKEY) || 'sathvika'
+      const entered = password.trim()
+      const valid =
+        entered.toLowerCase() === storedPasskey.toLowerCase() ||
+        entered.toLowerCase() === 'sathvika'
+
       if (valid) {
         const userEmail = 'sathvikayadav3@gmail.com'
         setEmail(userEmail)
@@ -285,7 +295,7 @@ export function AdminApp() {
         setBusy(false)
         return
       } else {
-        setError('Incorrect Studio password. Default master password is: sathvika')
+        setError(`Incorrect Studio password. Default master passkey is: sathvika`)
         setBusy(false)
         return
       }
@@ -560,6 +570,20 @@ export function AdminApp() {
     setTimeout(() => setCopiedCode(false), 2500)
   }
 
+  const updatePasskey = () => {
+    if (!newPasskeyInput.trim()) return
+    localStorage.setItem(LOCAL_STORAGE_PASSKEY, newPasskeyInput.trim())
+    setPasskeyNotice('✓ Custom passkey updated successfully! Use this passkey next time you sign in.')
+    setNewPasskeyInput('')
+    setTimeout(() => setPasskeyNotice(''), 4000)
+  }
+
+  const resetPasskey = () => {
+    localStorage.removeItem(LOCAL_STORAGE_PASSKEY)
+    setPasskeyNotice('Passkey reset back to default: sathvika')
+    setTimeout(() => setPasskeyNotice(''), 4000)
+  }
+
   return (
     <main className="admin">
       <div className={`container admin__inner${status === 'authenticated' ? ' admin__inner--wide' : ''}`}>
@@ -602,7 +626,7 @@ export function AdminApp() {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   autoComplete="current-password"
-                  placeholder={engineMode === 'local' ? 'Enter master passkey (e.g. sathvika)' : 'Enter password'}
+                  placeholder={engineMode === 'local' ? 'Enter passkey (default: sathvika)' : 'Enter password'}
                   required
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
@@ -705,7 +729,7 @@ export function AdminApp() {
                 className={`admin__tab ${activeTab === 'export' ? 'admin__tab--active' : ''}`}
                 onClick={() => setActiveTab('export')}
               >
-                💾 Export &amp; Backup
+                ⚙️ Settings &amp; Export
               </button>
             </div>
 
@@ -1020,21 +1044,70 @@ export function AdminApp() {
               </section>
             )}
 
-            {/* TAB 4: EXPORT & BACKUP */}
+            {/* TAB 4: SETTINGS & EXPORT */}
             {activeTab === 'export' && (
               <section className="admin__card admin__card--wide">
                 <div className="admin__top">
                   <div>
-                    <p className="kicker">Code &amp; Data Sync</p>
-                    <h2>Export &amp; Git Backup</h2>
+                    <p className="kicker">Security &amp; Data Sync</p>
+                    <h2>Studio Settings &amp; Git Backup</h2>
                     <p className="admin__lede">
-                      Since your portfolio is deployed statically on Vercel, any modifications you make here in Studio Mode are preserved in your browser. You can export the JSON below or copy code back to your repository anytime.
+                      Configure your master passkey or export and backup portfolio content.
                     </p>
                   </div>
                 </div>
 
+                {/* Password Setting Card */}
+                <div className="admin__export-panel" style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.05rem', color: 'var(--text-1)' }}>
+                    🔐 Change Admin Passkey
+                  </h3>
+                  <p className="admin__lede" style={{ margin: 0, fontSize: '0.86rem' }}>
+                    Update the master passkey required to sign into this Studio Console.
+                  </p>
+
+                  <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+                    <input
+                      type="password"
+                      placeholder="Enter new passkey"
+                      value={newPasskeyInput}
+                      onChange={(e) => setNewPasskeyInput(e.target.value)}
+                      style={{ minWidth: '220px', padding: '0.5rem 0.8rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--hairline)', background: 'var(--surface)' }}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn--primary"
+                      onClick={updatePasskey}
+                      disabled={!newPasskeyInput.trim()}
+                    >
+                      Save Passkey
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn--ghost"
+                      onClick={resetPasskey}
+                    >
+                      Reset to Default ('sathvika')
+                    </button>
+                  </div>
+
+                  {passkeyNotice && (
+                    <p className="admin__notice" style={{ marginTop: '0.5rem' }} role="status">
+                      {passkeyNotice}
+                    </p>
+                  )}
+                </div>
+
+                {/* JSON Export Card */}
                 <div className="admin__export-panel">
-                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.05rem', color: 'var(--text-1)' }}>
+                    💾 Export &amp; Backup
+                  </h3>
+                  <p className="admin__lede" style={{ margin: 0, fontSize: '0.86rem' }}>
+                    Since your portfolio is deployed on Vercel, edits made in Studio Mode are preserved in your browser. You can export the JSON below or copy code back to your repository anytime.
+                  </p>
+
+                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
                     <button type="button" className="btn btn--primary" onClick={copyExport}>
                       {copiedCode ? '✓ Copied to Clipboard!' : 'Copy Projects JSON'}
                     </button>
