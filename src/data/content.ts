@@ -692,6 +692,7 @@ export const contact = {
   email: 'sathvikayadav3@gmail.com',
   links: [
     { label: 'GitHub', url: 'https://github.com/sathvikagudise' },
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/sathvikayadav' },
   ],
   note: '',
 } as const

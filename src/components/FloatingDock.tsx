@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { contact } from '../data/content'
-import { GitHubIcon } from './icons'
+import { GitHubIcon, LinkedInIcon } from './icons'
 import './floating-dock.css'
 
 interface FloatingDockProps {
@@ -82,6 +82,18 @@ export function FloatingDock({ onOpenTerminal }: FloatingDockProps) {
             title="GitHub"
           >
             <GitHubIcon size={14} />
+          </a>
+
+          {/* LinkedIn link */}
+          <a
+            className="floating-dock__btn"
+            href="https://www.linkedin.com/in/sathvikayadav"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+            title="LinkedIn"
+          >
+            <LinkedInIcon size={14} />
           </a>
 
           {/* Back to top */}

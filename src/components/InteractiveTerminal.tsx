@@ -96,7 +96,7 @@ Focus: Applied AI, retrieval-augmented generation (RAG), agentic workflows, and 
       case 'contact':
         newHistory.push({
           type: 'output',
-          text: `Email: ${contact.email}\nGitHub: https://github.com/sathvikagudise`,
+          text: `Email: ${contact.email}\nGitHub: https://github.com/sathvikagudise\nLinkedIn: https://www.linkedin.com/in/sathvikayadav`,
         })
         break
 

@@ -1,7 +1,7 @@
 import { site } from '../data/content'
 import { Link } from './RouterLink'
 import { Portrait } from './Portrait'
-import { ArrowRightIcon, DownloadIcon, GitHubIcon } from './icons'
+import { ArrowRightIcon, DownloadIcon, GitHubIcon, LinkedInIcon } from './icons'
 
 /**
  * Modern Homepage Hero — status indicator, punchy typography, action buttons,
@@ -52,6 +52,16 @@ export function HomeHero() {
             >
               <GitHubIcon size={15} />
               GitHub
+            </a>
+            <a
+              className="btn btn--ghost home-hero__cta"
+              href="https://www.linkedin.com/in/sathvikayadav"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
+            >
+              <LinkedInIcon size={15} />
+              LinkedIn
             </a>
           </div>
 
