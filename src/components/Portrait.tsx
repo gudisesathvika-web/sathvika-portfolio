@@ -32,23 +32,23 @@ export function Portrait() {
                   patternUnits="userSpaceOnUse"
                   patternTransform="rotate(35)"
                 >
-                  <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(168, 85, 247, 0.35)" strokeWidth="1" />
+                  <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(135, 169, 107, 0.35)" strokeWidth="1" />
                 </pattern>
                 <radialGradient id="shade" cx="50%" cy="38%" r="70%">
-                  <stop offset="0%" stopColor="rgba(168, 85, 247, 0.22)" />
-                  <stop offset="100%" stopColor="rgba(11, 10, 18, 0)" />
+                  <stop offset="0%" stopColor="rgba(213, 133, 31, 0.2)" />
+                  <stop offset="100%" stopColor="rgba(20, 18, 14, 0)" />
                 </radialGradient>
               </defs>
               <circle cx="100" cy="100" r="96" fill="url(#shade)" />
               <circle cx="100" cy="100" r="96" fill="url(#hatch)" />
-              <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(168, 85, 247, 0.6)" strokeWidth="1.5" />
+              <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(135, 169, 107, 0.6)" strokeWidth="1.5" />
               <text
                 x="100"
                 y="118"
                 textAnchor="middle"
                 fontFamily="Instrument Serif, Georgia, serif"
                 fontSize="64"
-                fill="rgba(250, 245, 255, 0.9)"
+                fill="rgba(247, 244, 238, 0.95)"
               >
                 {site.initials}
               </text>

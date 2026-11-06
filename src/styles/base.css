@@ -26,9 +26,9 @@ body {
   min-height: 100vh;
   background-color: var(--background);
   background-image:
-    radial-gradient(1100px 650px at 80% -5%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 70%),
-    radial-gradient(900px 550px at 10% 20%, color-mix(in srgb, var(--highlight) 12%, transparent), transparent 65%),
-    radial-gradient(1000px 700px at 50% 85%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 75%),
+    radial-gradient(1100px 650px at 80% -5%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+    radial-gradient(900px 550px at 10% 20%, color-mix(in srgb, var(--highlight) 10%, transparent), transparent 65%),
+    radial-gradient(1000px 700px at 50% 85%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 75%),
     linear-gradient(180deg, var(--background) 0%, color-mix(in srgb, var(--surface) 40%, var(--background)) 50%, var(--background) 100%);
   background-attachment: fixed;
   color: var(--text-2);
@@ -39,6 +39,12 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* Light mode: clean editorial background, zero harsh or purple gradients */
+[data-theme="light"] body {
+  background-color: var(--background);
+  background-image: none;
 }
 
 img,
@@ -173,14 +179,14 @@ ol {
 }
 
 .tag--starter {
-  border-color: rgba(245, 158, 11, 0.4);
-  color: var(--cat-achievements);
-  background: color-mix(in srgb, var(--cat-achievements) 10%, transparent);
+  border-color: rgba(213, 133, 31, 0.4);
+  color: var(--highlight);
+  background: color-mix(in srgb, var(--highlight) 10%, transparent);
 }
 
 /* Glassmorphism helpers */
 .glass-panel {
-  background: color-mix(in srgb, var(--surface) 65%, transparent);
+  background: color-mix(in srgb, var(--surface) 75%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--hairline);
@@ -221,13 +227,13 @@ ol {
   background: var(--accent);
   color: var(--accent-ink);
   font-weight: 600;
-  box-shadow: 0 4px 14px -3px color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 4px 14px -3px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .btn--primary:hover {
   background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px -3px color-mix(in srgb, var(--accent) 60%, transparent);
+  box-shadow: 0 6px 20px -3px color-mix(in srgb, var(--accent) 50%, transparent);
 }
 
 .btn--ghost {

@@ -225,3 +225,5 @@ exists.
 
 - `npm run lint` and `npx tsc -b` should stay clean. Keep it that way.
 - Don't commit secrets, real credentials, or the actual portrait PDF until ready — asset paths are documented, not embedded in the UI as fake downloads.
+
+

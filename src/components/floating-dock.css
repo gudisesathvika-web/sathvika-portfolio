@@ -24,10 +24,10 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.4rem 0.55rem;
-  background: color-mix(in srgb, var(--surface) 85%, transparent) !important;
+  background: color-mix(in srgb, var(--surface) 88%, transparent) !important;
   border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent) !important;
   border-radius: var(--radius-pill);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.7), 0 0 20px -5px color-mix(in srgb, var(--accent) 30%, transparent) !important;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.7), 0 0 20px -5px color-mix(in srgb, var(--highlight) 25%, transparent) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
 }
@@ -69,7 +69,7 @@
 
 .floating-dock__btn--terminal:hover {
   background: color-mix(in srgb, var(--accent) 22%, transparent);
-  color: #FFFFFF;
+  color: var(--text-1);
 }
 
 .floating-dock__prompt {
@@ -112,8 +112,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #10B981;
-  box-shadow: 0 0 8px #10B981;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
 }
 
 @keyframes slideUpFade {
@@ -146,4 +146,3 @@
     max-width: 90vw;
   }
 }
-

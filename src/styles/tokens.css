@@ -1,23 +1,24 @@
 /* ==========================================================================
    Design tokens — Sathvika Gudise portfolio
-   Theme system: 
-     - Dark: Velvet Obsidian & Electric Amethyst / Rosé Orchid
-     - Light: Soft Cloud Lilac & Royal Purple
+   Theme system:
+     - Dark: Warm Obsidian & Sage Green (#87A96B), Walnut (#5A3E2B), Amber Glow (#D5851F)
+     - Light: Clean Warm Alabaster & Deep Sage / Walnut (Zero Purple)
    ========================================================================== */
 
 :root {
   color-scheme: dark;
 
-  /* --- Theme tokens: dark (Velvet Obsidian & Electric Amethyst) --- */
-  --background: #0B0A12;
-  --surface: #141222;
-  --surface-elevated: #1F1B33;
-  --text-primary: #FAF5FF;
-  --text-secondary: #B4B0C7;
-  --accent: #A855F7;
-  --accent-hover: #C084FC;
-  --border: #2D2545;
-  --highlight: #F472B6;
+  /* --- Theme tokens: dark (Sage Green, Walnut Brown, Amber Glow) --- */
+  --background: #14120E;
+  --surface: #1E1A15;
+  --surface-elevated: #2A231C;
+  --text-primary: #F7F4EE;
+  --text-secondary: #BFB5A7;
+  --accent: #87A96B;
+  --accent-hover: #9EBF82;
+  --border: #3D3328;
+  --highlight: #D5851F;
+  --walnut: #5A3E2B;
 
   /* --- Compatibility tokens (dark) --- */
   --ink-950: var(--background);
@@ -35,16 +36,16 @@
   --text-3: color-mix(in srgb, var(--text-secondary) 75%, transparent);
 
   --accent-2: var(--accent-hover);
-  --accent-ink: #0A0512;
+  --accent-ink: #12100C;
   --accent-soft: color-mix(in srgb, var(--accent) 15%, transparent);
   --accent-line: color-mix(in srgb, var(--accent) 45%, transparent);
 
   /* --- Category accent badges --- */
   --cat-identity: var(--accent);
-  --cat-now: var(--accent-hover);
-  --cat-projects: var(--highlight);
-  --cat-skills: #34D399;
-  --cat-achievements: #F59E0B;
+  --cat-now: var(--highlight);
+  --cat-projects: var(--accent-hover);
+  --cat-skills: var(--highlight);
+  --cat-achievements: #E69B38;
 
   /* --- Typography --- */
   --font-display: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
@@ -85,23 +86,24 @@
 
   /* --- Elevation & Glow --- */
   --shadow-panel: 0 24px 60px -24px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(255, 255, 255, 0.05);
-  --shadow-glow: 0 0 40px -10px color-mix(in srgb, var(--accent) 30%, transparent);
-  --shadow-card: 0 10px 30px -15px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 35px -8px color-mix(in srgb, var(--highlight) 25%, transparent);
+  --shadow-card: 0 10px 30px -15px rgba(10, 8, 6, 0.7);
 }
 
 [data-theme="light"] {
   color-scheme: light;
 
-  /* --- Theme tokens: light (Soft Cloud Lilac & Royal Purple) --- */
-  --background: #FAF7FD;
+  /* --- Theme tokens: light (Warm Alabaster & Deep Sage / Walnut - Zero Purple) --- */
+  --background: #FAF8F5;
   --surface: #FFFFFF;
-  --surface-elevated: #F4ECFB;
-  --text-primary: #1C152B;
-  --text-secondary: #584F6E;
-  --accent: #9333EA;
-  --accent-hover: #7E22CE;
-  --border: #E8DCF5;
-  --highlight: #DB2777;
+  --surface-elevated: #F4EFEA;
+  --text-primary: #221B15;
+  --text-secondary: #63574A;
+  --accent: #4F7037;
+  --accent-hover: #3E5A2A;
+  --border: #E3D9CC;
+  --highlight: #C27415;
+  --walnut: #5A3E2B;
 
   /* --- Compatibility tokens (light) --- */
   --ink-950: var(--background);
@@ -124,14 +126,14 @@
   --accent-line: color-mix(in srgb, var(--accent) 35%, transparent);
 
   --cat-identity: var(--accent);
-  --cat-now: var(--accent-hover);
-  --cat-projects: var(--highlight);
-  --cat-skills: #059669;
-  --cat-achievements: #D97706;
+  --cat-now: var(--highlight);
+  --cat-projects: var(--accent-hover);
+  --cat-skills: var(--highlight);
+  --cat-achievements: #C27415;
 
-  --shadow-panel: 0 24px 60px -28px rgba(28, 21, 43, 0.12), 0 0 1px 1px rgba(28, 21, 43, 0.05);
-  --shadow-glow: 0 0 35px -8px color-mix(in srgb, var(--accent) 22%, transparent);
-  --shadow-card: 0 10px 25px -10px rgba(28, 21, 43, 0.06);
+  --shadow-panel: 0 24px 60px -28px rgba(34, 27, 21, 0.1), 0 0 1px 1px rgba(34, 27, 21, 0.04);
+  --shadow-glow: 0 0 30px -8px color-mix(in srgb, var(--accent) 18%, transparent);
+  --shadow-card: 0 10px 25px -10px rgba(34, 27, 21, 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {

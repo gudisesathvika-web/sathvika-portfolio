@@ -25,7 +25,7 @@
   border: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
   box-shadow:
     0 0 0 10px color-mix(in srgb, var(--accent) 8%, transparent),
-    0 0 35px -5px color-mix(in srgb, var(--accent) 30%, transparent),
+    0 0 35px -5px color-mix(in srgb, var(--highlight) 25%, transparent),
     0 25px 50px -15px rgba(0, 0, 0, 0.7);
   transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
 }
@@ -34,7 +34,7 @@
   transform: scale(1.02);
   box-shadow:
     0 0 0 12px color-mix(in srgb, var(--accent) 14%, transparent),
-    0 0 45px -5px color-mix(in srgb, var(--accent) 40%, transparent),
+    0 0 45px -5px color-mix(in srgb, var(--highlight) 35%, transparent),
     0 30px 60px -15px rgba(0, 0, 0, 0.8);
 }
 
@@ -70,7 +70,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.45rem 0.85rem;
-  background: color-mix(in srgb, var(--surface-elevated) 85%, transparent);
+  background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
@@ -97,15 +97,15 @@
 
 .portrait__badge-icon {
   font-size: 0.85rem;
-  color: var(--accent);
+  color: var(--highlight);
 }
 
 .portrait__badge-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #10B981;
-  box-shadow: 0 0 8px #10B981;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
 }
 
 @keyframes floatBadge {
@@ -139,8 +139,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
+  background: var(--highlight);
+  box-shadow: 0 0 8px var(--highlight);
 }
 
 @media (max-width: 640px) {

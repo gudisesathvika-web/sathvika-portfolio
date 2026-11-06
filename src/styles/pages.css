@@ -9,8 +9,13 @@
   padding-top: calc(var(--nav-height) + clamp(2.5rem, 5vw, 4.5rem));
   padding-bottom: clamp(3.5rem, 6vw, 6.5rem);
   background:
-    radial-gradient(60% 55% at 80% 15%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 70%),
-    radial-gradient(50% 50% at 10% 20%, color-mix(in srgb, var(--highlight) 12%, transparent), transparent 70%);
+    radial-gradient(60% 55% at 80% 15%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+    radial-gradient(50% 50% at 10% 20%, color-mix(in srgb, var(--highlight) 10%, transparent), transparent 70%);
+}
+
+/* Light mode: clean, non-AI-like background without artificial gradients */
+[data-theme="light"] .home-hero {
+  background: transparent;
 }
 
 .home-hero__grid {
@@ -28,7 +33,7 @@
   padding: 0.35rem 0.85rem;
   border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--surface-elevated) 85%, transparent);
-  border: 1px solid color-mix(in srgb, #10B981 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -41,8 +46,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #10B981;
-  box-shadow: 0 0 10px #10B981;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
   animation: pulseDot 2s ease-in-out infinite;
 }
 
@@ -70,7 +75,7 @@
 .home-hero__title-accent {
   display: inline-block;
   font-style: italic;
-  color: var(--accent);
+  color: var(--highlight);
 }
 
 .home-hero__role {
@@ -205,7 +210,7 @@
   border-color: var(--accent-line);
   background: color-mix(in srgb, var(--surface-elevated) 85%, transparent);
   transform: translateY(-4px);
-  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.6), 0 0 25px -6px color-mix(in srgb, var(--accent) 30%, transparent);
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.6), 0 0 25px -6px color-mix(in srgb, var(--highlight) 25%, transparent);
 }
 
 .home-card:focus-visible {
