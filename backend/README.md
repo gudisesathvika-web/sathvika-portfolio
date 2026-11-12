@@ -57,7 +57,7 @@ creates `owners` and `auth_sessions` (called `0002` in `alembic/versions`).
 | `APP_ENV` | Environment label | `development` |
 | `LOG_LEVEL` | Logging level | `INFO` |
 | `DATABASE_URL` | SQLAlchemy PostgreSQL URL | local `portfolio` DB |
-| `CORS_ORIGINS` | Comma-separated allowed origins | `http://127.0.0.1:5173,http://localhost:5173` |
+| `CORS_ORIGINS` | Comma-separated allowed origins | `http://127.0.0.1:5173,http://localhost:5173,https://sathvika-portfolio-seven.vercel.app,https://sathvikagudise.runs-on.dev` |
 | `SESSION_MAX_AGE_SECONDS` | Session cookie lifetime | `43200` (12h) |
 | `COOKIE_SECURE` | Secure flag on cookies | `false` |
 | `COOKIE_SAMESITE` | SameSite on cookies | `lax` |
@@ -134,10 +134,16 @@ real email channel exists.
 
 ### Production cookie/CORS settings
 
-The frontend and backend may be on separate origins. For credentialed
-cross-site requests you **must** set:
+The frontend and backend may be on separate origins. Set `CORS_ORIGINS` in the
+backend deployment environment to the exact frontend origins (no trailing
+slashes). For these deployments and local development, use:
 
-- `CORS_ORIGINS` to the exact frontend origin,
+```env
+CORS_ORIGINS=http://127.0.0.1:5173,http://localhost:5173,https://sathvika-portfolio-seven.vercel.app,https://sathvikagudise.runs-on.dev
+```
+
+For credentialed cross-site requests you **must** also set:
+
 - `COOKIE_SECURE=true`,
 - `COOKIE_SAMESITE=none`.
 

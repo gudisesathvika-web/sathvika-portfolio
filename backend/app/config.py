@@ -31,7 +31,11 @@ class Settings(BaseSettings):
     )
 
     # Comma-separated allowlist of front-end origins.
-    cors_origins: str = "http://127.0.0.1:5173,http://localhost:5173"
+    cors_origins: str = (
+        "http://127.0.0.1:5173,http://localhost:5173,"
+        "https://sathvika-portfolio-seven.vercel.app,"
+        "https://sathvikagudise.runs-on.dev"
+    )
 
     # --- Authentication / session ---
     # Opaque session token cookie. The token itself is never stored; only its
